@@ -1,0 +1,190 @@
+.campanha {
+    display: flex;
+    align-items: flex-start;
+    margin: 0 3%;
+    width: 94%;
+}
+.campanha .aside{   
+    position: relative;
+    float: right;
+    width : 40%;
+    display: flex;
+    font-size: 1.0em;
+    padding: 0 2%;
+    flex-direction: column;
+    flex-wrap: wrap;
+    border: none;
+}
+.aside h3{
+    font-weight: 700;
+    text-align:center;
+    font-size: 1.5em;
+    margin : 2%;
+}
+.aside img{
+    
+    width : 90%;
+    margin: 5% 0%;
+}
+.aside progress {
+    width : 80%;
+    height: 30px;
+    margin-left: 5%;
+    color : #2c88d9;
+    display : block;
+}
+.aside .preco{
+    padding: 2.5% 3%;
+    margin: 5% 1%;
+    max-width: 30%;
+    align-self: center;
+    background: #6558f5;
+    color : #fff;
+    font-size: 1.2em;
+    border-radius: 5px;
+}
+.aside .preco:hover{
+    background-color: #3c2bf3;
+}
+
+.section{
+    border: 1px solid #444;
+    padding: 1%;
+    width : 60%;
+    margin-left: 5%;
+}
+.rifas{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2%;
+}
+.section .rifas .data{
+    padding: 2% 2%;
+    align-self: flex-end;
+    font-size: 1em;
+    color: #f5f5f5;
+    background-color: #c62f45;
+}
+.items-grid {
+    display: grid;
+    width: 100%;
+    text-align: center;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 0px;
+    list-style: none;
+    margin-top: 5%;
+  }
+  .items-grid .td{
+      border : 1px solid #bebebe;
+      padding : 5px;
+      cursor: pointer;
+  }
+  .items-grid .vermelho{
+      background-color: #c62f45;
+  }
+  .items-grid .cinza{
+      background : #aaa9ac9d !important;
+  }
+  .items-grid .td1{
+      color : rgba(0,0,0,0);
+      border : 1px solid #bebebe;
+      padding : 1px;
+      cursor : pointer;
+  }
+  
+  .items-grid td.visited {
+    background: #E1FAEC;
+    border: 2px solid #34CB79;
+  }
+.rifas .details{
+    display: flex;
+    flex-direction:row;
+    align-items: center;
+    margin-top: 5%;
+    width: 100%;
+}
+.details p{
+    margin: 0  1.5%;
+}
+.details .cor1{
+    border: 1px solid #444;
+    border-radius: 16px;
+    background-color: #fff;
+    width : 26px;
+    height: 26px;
+
+}
+
+.details .cor2{
+    border: 1px solid #444;
+    border-radius: 16px;
+    background-color: #aaa9ac9d;
+    width : 26px;
+    height: 26px;
+}
+
+.details .cor3{
+    border: 1px solid #444;
+    border-radius: 16px;
+    background-color: #c62f45;
+    width : 26px;
+    height: 26px;
+}
+.rifas .total{
+    padding: 2% 2%;
+    align-self: flex-end;
+    font-size: 1em;
+    margin : 2% 0;
+    margin-top: 5%;
+    color: #f5f5f5;
+    background-color: #444;
+}
+.rifas .compra{
+    padding: 2%;
+    margin: 2% 0;
+    align-self: flex-end;
+    background: #1AAE9F;
+    color : #fff;
+    font-size: 1.0em;
+    cursor : pointer;
+    border : 0.5px solid #4444;
+    border-radius: 5px;
+}
+.compra:hover{
+    background-color: #20d5c3;
+}
+.final{
+    padding: 2%;
+    margin: 2% 0;
+    align-self: flex-end;
+    background: #c62f45;
+    color : #fff;
+    font-size: 1.0em;
+    cursor : pointer;
+    border : 0.5px solid #4444;
+    border-radius: 5px;
+}
+
+@media screen and (max-width : 700px){
+    .campanha{
+        flex-direction: column;
+    }
+    .campanha .aside{
+        width : 94%;
+        margin : 1% 3%;
+    }
+    .campanha .section{
+        width: 96%;
+        margin: 2%;
+    }
+    .campanha .section .rifas, .campanha .section .details{
+        overflow-x: scroll;
+    }
+    .details .cor1{
+        margin-left: 2%;
+    }
+    .details .cor1, .details .cor2, .details .cor3{
+        height : 18px;
+    }
+}

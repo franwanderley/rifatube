@@ -1,0 +1,36 @@
+
+.notfound{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.notfound h1{
+    font-size: 3.0em;
+    margin: 5%;
+    margin-bottom: 3%;
+    font-weight: 700;
+    letter-spacing: .5cm;
+}
+.notfound h2{
+    font-size: 1.5em;
+    font-weight: 600;
+    margin-bottom: 3%;
+}
+.notfound a{
+    padding: 2%;
+    color: #444;
+    background-color: #1aae9f;
+    text-decoration: none;
+    max-width: 20%;
+}
+.notfound a:hover{
+    background-color: #20D5C3;
+}
+@media screen and (max-width : 700px){
+    .notfound a{
+        text-align: center;
+        font-size: 1em;
+        min-width: 40%;
+    }
+}

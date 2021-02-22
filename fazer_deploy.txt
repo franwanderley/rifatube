@@ -1,0 +1,17 @@
+--- NodeJS ---
+*Criar arquivo procfile : web : npm start
+*mudar package.json : start : node src/server.js
+*mudar package.json : build : tsc
+*Rodar npm run build
+*Mudar a porta : app.listen(process.env.PORT || 3333);
+*setar as variaveis de ambiente
+*Depois fazer o processo do heroku cli
+
+--- ReactJS ---
+*Rodar npm build 
+*Mudar no heroku o buildpack para mars/create-react-app
+*Depois fazer o processo do heroku cli
+
+REFERENCIAS
+https://www.youtube.com/watch?v=-j7vLmBMsEU&t=837s
+https://www.youtube.com/watch?v=DVTceFeaAdc&t=969s

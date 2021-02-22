@@ -1,0 +1,103 @@
+
+.login{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.login .form-login{   
+    display: flex;
+    font-size: 1.0em;
+    min-width: 25%;
+    padding: 2%;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    border: 1px solid #292929;
+    margin : 5% 0;
+}
+
+.login .form-login img{
+    width: 30%;
+    margin : 0;
+    margin-bottom: 5%;
+}
+
+.form-login .divemail, .form-login .divsenha{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 4% 0;
+    min-width:100%
+}
+.form-login  label{
+    font-size: 1.0em;
+    margin-bottom: 2%;
+    color : #a463d8;
+    font-weight: 600;
+}
+
+.login .form-login input{
+    border-radius: 4px;
+    width: 100%;
+    padding: 4px 8px;
+    border: 1px solid #444;
+}
+
+.form-login .btn{
+    display: flex;
+    margin-top: 5%;
+    flex-direction:row;
+    justify-content: space-around
+}
+.form-login .btn-entrar{
+    padding: 4% 6%;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    background-color: #3c2bf3;
+    color : #fff;
+    cursor: pointer;
+    margin-bottom: 2%;
+    margin-right: 5%;
+}
+.form-login .btn-entrar:hover{
+    background-color: #6558f5;
+}
+
+.form-login .btn-registrar{
+    padding: 6% 8%;
+    border: none;
+    font-size: 1em;
+    border-radius: 6px;
+    background-color: #c62f45;
+    color : #fff;
+    cursor: pointer;
+    margin-bottom: 2%;
+}
+.form-login .btn-registrar:hover{
+    background-color: #d3455b;
+}
+
+.esqsenha{
+    display: flex;
+    align-items: center;
+    margin-top: 3%;
+    font-size: .9em;
+}
+@media screen and (max-width : 700px){
+    .login .form-login{
+        min-width: 70%;
+        padding: 4%;
+    } 
+    .form-login input{
+        width:100%;
+    }
+    .form-login label{
+        font-size:1.2em;
+    }
+    .form-login .esqsenha{
+        font-size: 1.1em;
+    }
+}

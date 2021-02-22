@@ -1,0 +1,179 @@
+.registrar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 100%;
+    margin : 0 4%;
+
+}
+
+.registrar .form-registrar{   
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    border : 0;
+    margin-bottom: 2%;
+}
+
+.form-registrar .one{
+    display: flex;
+    font-size: 1.0em;
+    padding: 2% 5%;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #292929;
+}
+.form-registrar .two{
+    display: flex;
+    font-size: 1.0em;
+    padding: 2% 5%;
+    margin-left: 5%;
+    flex-direction: column;
+    justify-content:center;
+    align-items: center;
+    border: 1px solid #292929;
+}
+.two h3{
+    font-size: 1.3em;
+    font-weight: 700;
+}
+
+ .form-registrar img{
+    width: 30%;
+    margin-bottom: 5%;
+}
+ .form-registrar .divemail,.form-registrar .divsenha,.form-registrar .divnome, .divsobrenome,.divsobrenome, .divendereco{
+    display: flex;
+    flex-direction:column;
+    align-items: flex-start;
+    margin: 4%
+}
+.form-registrar .divcelular,.form-registrar .divinfluencer {
+    display: flex;
+    flex-direction:row;
+    align-items:center;
+    margin: 4%;
+}
+.divinfluencer label{
+    margin : 0;
+    margin-right: 2%;
+}
+.divcelular .numero{
+    width: 74%;
+    margin-left: 2%;
+} 
+.divcelular .ddd{
+    width: 24%;
+}
+
+.form-registrar label{
+    font-size: 1.0em;
+    margin-bottom: 2%;
+    color : #a463d8;
+    font-weight: 600;
+}
+.form-registrar input{
+    border-radius: 4px;
+    padding: 4px 8px;
+    border: 1px solid #444;
+}
+.divcelular input[type = "number"]{
+    width: 20%;
+    margin-right: 5%;
+}
+.divinfluencer input[type = "checkbox"]{
+    appearance: none;
+    position: relative;
+    background: #1aae9f;
+    outline: none;
+    border-radius: 20px;
+    box-shadow: inset 0 0 5px rgba(0,0,0, .2);
+    width: 70px;
+    margin-left: 2%;
+    height: 30px;
+}
+
+.divinfluencer input[type = "checkbox"]::before{
+    content : '';
+    position: absolute;
+    border-radius: 20px;
+    background: #fff;
+    width : 35px;
+    height: 30px;
+    top: 0;
+    left: 0;
+    transform: scale(1.1);
+    transition: .5s;
+    box-shadow: 0px 2px 5px rgba(0,0,0, .2);
+}
+.divinfluencer input:checked[type = "checkbox"]::before{
+    left: 33px;
+}
+
+.form-registrar .btn{
+    display: flex;
+    margin-top: 3%;
+    flex-direction:row;
+    justify-content: center;
+}
+.form-registrar .btn-entrar{
+    padding: 6% 6%;
+    border: none;
+    border-radius: 6px;
+    background-color: #3c2bf3;
+    color : #fff;
+    cursor: pointer;
+    margin-bottom: 2%;
+    margin-right: 10%;
+}
+.form-registrar .btn-entrar:hover{
+    background-color: #6558f5;
+}
+
+.form-registrar .btn-registrar{
+    padding: 6% 6%;
+    border: none;
+    border-radius: 6px;
+    background-color: #d3455b;
+    color : #fff;
+    cursor: pointer;
+    margin-bottom: 2%;
+}
+.form-registrar .btn-registrar:hover{
+    background-color: #c62f45;
+}
+
+@media screen and (max-width : 700px){
+    .form-registrar, .registrar{
+        flex-direction: column !important;
+        margin : 0;
+    }
+    .form-registrar img{
+        width: 25%;
+    }
+    .form-registrar .one{
+        margin : 3% 0%;
+       align-items: center;
+       min-width: 90%;
+       padding : 2%;
+    }
+    .form-registrar .two{
+        margin : 3% 2%;
+        align-items: center;
+        padding: 2%;
+    }
+    .two .divcelular .ddd{
+        width : 20%;
+        margin-left: 10%;
+
+    }
+    .two .divcelular .numero{
+        width: 60%;
+        margin-right: 10%;
+    }
+    .two .divcelular {
+        margin: 4% 0;
+    }
+}

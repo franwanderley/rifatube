@@ -1,0 +1,62 @@
+
+.novasenha{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.novasenha .form-novasenha{   
+    display: flex;
+    font-size: 1.0em;
+    padding: 1.5%;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    border: 1px solid #292929;
+}
+.form-novasenha h3{
+    font-size: 1.3em;
+    font-weight: 700;
+    margin-bottom: 2%;
+}
+
+.form-novasenha .divsenha{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 4% 0
+}
+.form-novasenha  label{
+    font-size: 1.0em;
+    margin-bottom: 2%;
+    color : #a463d8;
+    font-weight: 600;
+}
+
+.novasenha .form-novasenha input{
+    border-radius: 4px;
+    width: 100%;
+    padding: 4px 8px;
+    border: 1px solid #444;
+}
+
+
+.form-novasenha .btn-salve{
+    display: flex;
+    align-items:center;
+    padding: 2% 4%;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    background-color: #3c2bf3;
+    color : #fff;
+    cursor: pointer;
+    margin: 3% 0;
+}
+.form-novasenha .btn-salve svg{
+    margin-right: 5px;
+}
+.form-novasenha .btn-salve:hover{
+    background-color: #6558f5;
+}

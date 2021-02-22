@@ -1,0 +1,168 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font : Nunito, sans-serif;
+}
+
+body {
+    color : #000;
+    background: #fff;
+}
+
+a{
+    text-decoration: none;
+}
+
+header{
+    width: 100%;
+    margin:0%;
+    padding: 0 2%;
+    margin-bottom: 3%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    border-bottom : 1.5px solid #444;
+}
+header .btnmenu{
+    display:none;
+}
+header .menu{
+    display: none;
+}
+
+header form {
+    border: 1px solid #ccc;
+    padding: 4px;
+    margin : 2% 0%;
+  }
+  
+ header form > input, header form > input:focus {
+    border: none;
+    outline: none;
+  }
+  
+ header form > button {
+    background: #fff;
+    border: none;
+    cursor: pointer;
+    color: #130400;
+    padding: 4px 10px
+  }
+
+header .perfil {
+    width: 22%;
+    height: 56px;
+    margin : 2% 0;
+    justify-content: flex-end;
+    line-height: 56px;
+}
+header .perfil a{
+
+    font-size: 1.2em;
+    color : rgb(0, 0, 0);
+    cursor : pointer;
+}
+header .perfil a:last-child{
+    margin-left: 3%;
+}
+header .perfil a:hover{
+    color : #ccc;
+}
+
+header .img{
+    width: 56px;
+    height: 56px;
+    margin : 2% 0;
+}
+header .image a{
+    margin: 0%;
+}
+
+@media screen and (max-width : 700px){
+    header{
+        display: flex;
+    }
+    header .image{
+        margin: 2%;
+    }
+    header .perfil{ display: none;}
+    header .form-search{
+        display:none;
+        margin: 2% 15%;
+        padding : 3px;
+        width : 70%;
+        text-align: center;
+    }
+    .form-search button{
+        padding-right: 0;
+        background-color: #f5f5f5;
+    }
+    .form-search input{
+        background-color: #f5f5f5;
+        width : 85%;
+    }
+    header .menu{
+        display: none;
+        background-color: #f5f5f5;
+        left: 0;
+        padding: 0 24px 24px;
+        position: absolute;
+        top: 90px;
+        width: 100%;
+        z-index: 9999;
+    }
+    header .menu ul li{ padding: 1.5%;width: 100%; display: block; border: none; }
+    header .menu ul li a{
+        font-size: 1.5em;
+        color: #444;
+        display: block !important;
+        padding: 1.5%; 
+    }
+    header .menu li a:hover{
+        color: #ccc;
+        transition: .5s;
+    }
+    header .btnmenu{
+        position: relative;
+        float: right;
+        padding: 2% 3%;
+       
+        font-size: 1.1em;
+        margin: 2%;
+        margin-top: 3%;
+        color: #fff;
+		display: block;
+		text-align: center;
+        color: #fff;
+        background-color: #292929;
+		cursor: pointer;
+    }
+    header .open{
+        display : block;
+    }
+    header .perfil2 {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        margin: 2% 0%;
+        height: 56px;
+        line-height: 56px;
+        position: static;
+    
+    }
+    header .perfil2 a{
+    
+        font-size: 1.3em;
+        color : #444;
+        margin: 0;
+        margin-right : 9%;
+        cursor : pointer;
+    }
+    header .perfil2 a:hover{
+        color : #ccc;
+    }
+
+}

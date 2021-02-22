@@ -1,0 +1,286 @@
+.perfil {
+    display: flex;
+    align-items: flex-start;
+    margin : 0 4%;
+    width: 94%;
+}
+.perfil .aside{   
+    position: relative;
+    float: right;
+    width : 24%;
+    padding: 0;
+    display: flex;
+    font-size: 1.0em;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    border: none;
+}
+.aside form{
+    display : flex;
+    flex-direction: column;
+    align-items: center;
+}
+.aside .imgperfil{
+    position : absolute;
+    max-width: 70%;
+    top : 35px;
+}
+.aside textarea{
+    border-radius: 4px;
+    padding: 4px 8px;
+    border: 1px solid #444;
+    resize: none;
+}
+.aside img{
+    cursor : pointer;
+}
+.aside h3{
+    font-size: 1.3em;
+    margin-top: 5%;
+}
+.aside .formbtn{
+    display : flex;
+    justify-content: center;
+    margin: 5% 0;
+    width : 100%; 
+}
+.aside .btn-salva{
+    padding: 3%;
+    cursor: pointer;
+    align-self: center;
+    /* max-width: 30%; */
+    background-color: #1aae9f;
+    margin-right: 5%;
+    color : #fff;
+    font-size: 1em;
+    border-radius: 5px;
+    border : none;
+}
+.btn-salva:hover{
+    background-color: #20D5C3;
+}
+.aside .btn-editar{
+    padding: 3%;
+    align-self: center;
+    cursor: pointer;
+    /* max-width: 30%; */
+    background-color: #3c2bf3;
+    color : #fff;
+    font-size: 1em;
+    border-radius: 5px;
+}
+.btn-editar:hover{
+    background : #6558f5;
+}
+
+.perfil .section{
+    border: 1px solid #444;
+    padding: 1% 0.5%;
+    padding-bottom: 0;
+    width : 71%;
+    margin-left: 4%;
+}
+.btn-campanha{
+    display : flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.btn-add{
+    padding: 1.5%  2%;
+    margin: 0% 0.5%;
+    /* max-width: 30%; */
+    background-color: #3c2bf3;
+    color : #fff;
+    font-size: 1em;
+    border-radius: 5px;
+}
+.btn-add:hover{
+    background: #6558f5;
+}
+.btn-ver{
+    padding: 1.5% 2%;
+    margin: 0 0.5%;
+    /* max-width: 30%; */
+    background-color: #1aae9f;
+    color : #fff;
+    font-size: 1em;
+    border-radius: 5px;
+}
+.btn-ver:hover{
+    background: #20D5C3;
+}
+.btnone, .btntwo{
+    font-size: 1.2em;
+    padding : 1.5% 0;
+    font-weight: 600;
+    margin-right: 2%;
+    color : #444;
+    text-decoration: none;
+    cursor: pointer;
+}
+.marcado{
+    border-bottom: 2px solid #6558f5;
+}
+.minhascampanhas{
+    width: 100%;
+    position: relative;
+    border : none;
+}
+.minhascampanhas table{
+    width:100%;
+    margin : 3% 0;
+    height: auto;
+    border-spacing: 0;
+    border-radius: 0;
+}
+.minhascampanhas table th{
+    text-transform: uppercase;
+    background-color: #444;
+    color : #f5f5f5;
+    text-align: center;
+    font-size: 1em;
+    padding : 5px 6px;
+}
+.minhascampanhas table td{
+    text-align: center;
+    font-size: 1em;
+    padding : 5px 8px;
+    
+}
+.minhascampanhas table tr{
+    border: 1px groove #444;
+
+}
+.minhascampanhas table img{
+    width:100%;
+}
+.minhascampanhas table tr:nth-child(odd){
+    background:#eeeeee;
+
+}
+.minhascampanhas table td:last-child{
+    background-color: #A69FF9;
+}
+.minhascampanhas table td a{
+     color: #130400;
+     text-decoration: none;
+}
+.minhascampanhas table td:last-child:hover{
+    background-color: #8379F6;
+}
+.minhascampanhas table tr:nth-child(odd) td:last-child{
+    background-color: #958CF8;
+}
+.minhascampanhas table tr:nth-child(odd) td:last-child:hover{
+    background-color: #7165F6;
+}
+
+.minhasrifas{
+    width: 100%;
+    border : none;
+}
+
+.minhasrifas table{
+    width:100%;
+    margin : 3% 0;
+    height: auto;
+    border-spacing: 0;
+    border-radius: 0;
+}
+.minhasrifas table th{
+    text-transform: uppercase;
+    background-color: #444;
+    color : #f5f5f5;
+}
+.minhasrifas table td, .minhasrifas table th{
+    text-align: center;
+    font-size: 1em;
+    padding : 10px 12px;
+}
+.minhasrifas table tr{
+    border: 1px groove #444;
+
+}
+.minhasrifas table img{
+    width:160px;
+    height: 100px;
+}
+.minhasrifas table tr:nth-child(odd){
+    background:#eeeeee;
+
+}
+.minhasrifas table td:last-child{
+    background-color: #A69FF9;
+}
+.minhasrifas table td a{
+     color: #130400;
+     text-decoration: none;
+}
+.minhasrifas table td:last-child:hover{
+    background-color: #8379F6;
+}
+.minhascampanhas table tr:nth-child(odd) td:last-child{
+    background-color: #958CF8;
+}
+.minhascampanhas table tr:nth-child(odd) td:last-child:hover{
+    background-color: #7165F6;
+}
+.desativado{
+    display: none !important;
+    opacity: 0;
+}
+
+.perfil .pagination{
+    display : flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 3% 0;
+}
+.perfil .pagination button{
+    padding: 1%;
+    margin : 0 1%;
+    border : none;
+    border-radius: 8px;
+    background-color: #ccc;
+    color: #444;
+    text-align: center;
+    cursor: pointer;
+}
+.perfil .pagination button:hover{
+    background-color: #999;
+}
+.perfil .pagination .marca {
+    background-color: #888;
+}
+
+@media screen and (max-width : 700px){
+    .perfil{
+        flex-direction: column;
+        align-items: center;
+        justify-content:space-evenly;
+    }
+    .perfil .aside{
+        width: 100%;
+        margin : 2% 0;
+    }
+    .perfil .btnone, .perfil .btntwo{
+        font-size: 1em;
+        margin-bottom: 5%;
+    }
+    .perfil .section{
+        width: 96%;
+        margin: 2%;
+    }
+    .perfil .btn-campanha{
+        flex-direction: row;
+        flex-wrap: wrap;
+
+    }
+    .perfil .minhascampanhas, .perfil .minhasrifas{
+        overflow-x: scroll;
+    }
+}

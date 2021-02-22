@@ -1,0 +1,102 @@
+
+.createcampanha{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.createcampanha .form-campanha{   
+    display: flex;
+    font-size: 1.0em;
+    padding: 2%;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    border: 1px solid #292929;
+}
+.form-campanha h3{
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+.form-campanha .divnome, .form-campanha .divurl, .form-campanha .divdata, .form-campanha .divqtdmax, .form-campanha .divpreco{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 4% 0
+}
+
+.form-campanha .juntos{
+    display:flex;
+	flex-direction:row;
+	justify-content: space-around;
+	margin: 3% 0;
+}
+.form-campanha .juntos .divqtdmax, .form-campanha .juntos .divpreco{
+    align-items: center;
+}
+.form-campanha .juntos .divqtdmax input{
+    width : 60%;
+}
+.form-campanha .juntos .divpreco input{
+    margin-right: 5%;
+    width : 60%;
+}
+
+.form-campanha label{
+    font-size: 1.0em;
+    margin-bottom: 2%;
+    color : #a463d8;
+    font-weight: 600;
+}
+.createcampanha .form-campanha input{
+    border-radius: 4px;
+    padding: 4px 8px;
+    border: 1px solid #444;
+}
+
+.form-campanha .btn{
+    display: flex;
+    margin-top: 2%;
+    flex-direction:row;
+}
+.form-campanha .btn-entrar{
+    padding: 12px 10px;
+    border: none;
+    border-radius: 6px;
+    white-space: nowrap;
+    background-color: #3c2bf3;
+    color : #fff;
+    cursor: pointer;
+    margin-bottom: 2%;
+}
+.form-campanha .btn-entrar:hover{
+    background-color: #6558f5;
+}
+
+@media screen and (max-width : 700px){
+    .createcampanha .form-campanha{
+        width : 80%;
+    }
+    .form-campanha .btn{
+        text-align: center;
+        justify-content: center;
+        width: 100%;
+        margin-top: 3%;
+    }
+    .form-campanha .juntos{
+        flex-direction: column;
+        margin: 0;
+    }
+    .form-campanha .juntos .divqtdmax label, .form-campanha .juntos .divpreco label {
+        align-self: flex-start;
+    }
+    .form-campanha .juntos .divqtdmax input{
+        width : 100%;
+    }
+    .form-campanha .juntos .divpreco input{
+        margin-right: 0%;
+        width : 100%;
+    }
+}

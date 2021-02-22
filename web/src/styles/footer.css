@@ -1,0 +1,74 @@
+footer{
+    display : flex;
+    min-width: 100%;
+    margin: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #292929;
+    color : #fff;
+    font-size: 1.0em;
+    padding: 0 3%;
+    margin-top: 5%;
+}
+
+footer .menu{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;                                                    
+}
+footer .menu a{
+    color : #fff;
+    margin : 2% 0;
+}
+footer .menu a:hover{
+    color: #ebebeb;
+}
+
+footer .copy{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2% 0%;
+}
+footer .copy img{
+    width : 40%;
+}
+footer .copy a{
+    margin: 0;
+    text-align : center;
+}
+
+footer .social a{
+    font-size: 200%;
+    color: #fff;
+}
+
+footer .social a:hover{
+    color: #ebebeb;
+    font-size: 220%;
+}
+
+@media screen and (max-width : 700px){
+    footer {
+        flex-direction: column;
+        padding: 1% 0.5%;
+    }
+    footer .menu{
+        flex-direction:row;
+        width: 100%;
+        margin-bottom: 2%;
+        justify-content: space-evenly;
+    }
+    footer .copy img{
+        width: 50%;
+    }
+    footer .pcopy{
+        width: 100%;
+        text-align: center;
+    }
+    footer .social{
+        margin: 2% 0;
+    }   
+}

@@ -1,0 +1,323 @@
+.comprar{
+    display: flex;
+    flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin : 0 4%;
+    
+}
+.comprar .headerpay{
+	display: flex;
+	min-width: 100%;
+	flex-direction: row;
+	justify-content: center;
+	margin-bottom: 3%;
+}
+.comprar h1{
+	font-size: 1.5em;
+	color: #444;
+	margin-right: 8%;
+}
+.comprar .total{
+	font-size: 1.1em;
+	align-self: flex-end;
+	justify-self: start;
+	color : #eee;
+	padding: 1.5%;
+	background-color: #6558f5;
+}
+
+.comprar .menu {
+	list-style: none;
+	display: flex;
+	flex-direction : row;
+	justify-content: center;
+	align-items: center;
+	min-width: 80%;   
+    margin: 0;
+    padding: 0;
+}
+
+	.comprar .menu .opcoes {
+		align-items: center;
+		padding: 1.5% 1%;
+		border: 1px solid #DDD;
+		border-radius: 2px; 
+		text-align: center;
+		color: #444;
+		font-size: 1.3em;
+		margin-right: 2%;
+		cursor: pointer;
+	}
+	.comprar .menu .abrir{
+		border: 1.5px solid #6558f5;
+	}
+	.menu .opcoes:nth-last-child(){
+		margin-right: 0%;
+	}
+	.opcoes svg{
+		font-size: 2.0em;
+	}
+
+	.forms{
+		min-width: 50%;
+		align-items: center;
+		margin-top: 2%;
+	}
+	.credito, .debito, .boleto{
+		min-width: 100%;
+		display: none;
+	}
+	.forms .abrir{
+		display: block;
+	}
+
+.form-cc{
+	border: 1px solid #ddd;
+	display: flex;
+    font-size: 1.0em;
+    padding: 2% 5%;
+    flex-direction: column;
+    align-items: center;
+}
+.form-cc .ncartao, .form-cc .nomecartao{
+	display: flex;
+    flex-direction:column;
+	align-items: flex-start;
+	min-width: 60%;
+    margin: 3%
+}
+.comprar .juntos{
+	display:flex;
+	flex-direction:row;
+	justify-content: center;
+	margin: 3% 0;
+}
+.form-cc .validade, .form-cc .cod{
+	display: flex;
+    flex-direction:column;
+	align-items: center;
+}
+.form-cc label{
+    font-size: 1.0em;
+    margin-bottom: 2%;
+    color : #a463d8;
+    font-weight: 600;
+}
+.form-cc input{
+	border-radius: 4px;
+	width:100%;
+    padding: 4px 8px;
+    border: 1px solid #444;
+}
+.form-cc #validade, .form-cc #codigo{
+	width: 50%;
+
+}
+.form-cc .btnsubmit{
+	padding: 3% 6%;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    background-color: #3c2bf3;
+    color : #eee;
+    cursor: pointer;
+    margin: 2% 0;
+	width: auto;
+}
+.form-cc .btnsubmit:hover{
+    background-color: #6558f5;
+}
+
+.form-db{
+	border: 1px solid #ddd;
+	display: flex;
+    font-size: 1.0em;
+    padding: 2% 5%;
+    flex-direction: column;
+    align-items: center;
+}
+.form-db .ncartao, .form-db .nomecartao{
+	display: flex;
+    flex-direction:column;
+	align-items: flex-start;
+	min-width: 60%;
+    margin: 3%
+}
+.comprar .juntos{
+	display:flex;
+	flex-direction:row;
+	justify-content: center;
+	margin: 3% 0;
+}
+.form-db .validade, .form-db .cod{
+	display: flex;
+    flex-direction:column;
+	align-items: center;
+}
+.form-db label{
+    font-size: 1.0em;
+    margin-bottom: 2%;
+    color : #a463d8;
+    font-weight: 600;
+}
+.form-db input{
+	border-radius: 4px;
+	width:100%;
+    padding: 4px 8px;
+    border: 1px solid #444;
+}
+.form-db #validade, .form-db #codigo{
+	width: 50%;
+
+}
+.form-db .btnsubmit{
+	padding: 3% 6%;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    background-color: #3c2bf3;
+    color : #eee;
+    cursor: pointer;
+    margin: 2% 0;
+	width: auto;
+}
+.form-db .btnsubmit:hover{
+    background-color: #6558f5;
+}
+.form-bb{
+	border: 1px solid #ddd;
+	display: flex;
+    font-size: 1.0em;
+    padding: 2%;
+    flex-direction: column;
+    align-items: center;
+}
+.form-bb .dicas{
+	background-color: #f5f5f5;
+	list-style: none;
+	display: flex;
+	padding: 1%;
+	flex-direction:column;
+	min-width: 100%;
+}
+.dicas li{
+	display: flex;
+	flex-direction:row;
+	align-items:center;
+	padding-bottom: 2%;
+	border-bottom : 1px solid #444;
+	margin: 1.5% 0;
+	color: #444;
+}
+.dicas li:last-child{
+	border-bottom: none;
+	padding-bottom: 0;
+}
+
+.dicas li p{
+	margin: 0 0 0 5%;
+    font-family: Calibri;
+    font-size: 1.1em;
+    font-weight: 400;
+    color: #fff;
+    background: #525971;
+    padding: 9px 15px;
+    border-radius: 100px;
+}
+.dicas li svg{
+    margin: 0 40px 0 45px;
+    width: 100%;
+	max-width: 70px;
+	color: #444;
+	font-size: 2.5em;
+}
+.form-bb .cep, .form-bb .numerocasa{
+	display: flex;
+    flex-direction:column;
+	align-items: flex-start;
+	min-width: 60%;
+    margin: 3%
+}
+.form-bb label{
+    font-size: 1.0em;
+    margin-bottom: 2%;
+    color : #a463d8;
+    font-weight: 600;
+}
+.form-bb input, .form-bb select{
+	border-radius: 4px;
+	width:100%;
+    padding: 4px 8px;
+    border: 1px solid #444;
+}
+.form-bb select{
+	padding : 2%;
+	font-size: 1em;
+}
+.form-bb .btnsubmit{
+	padding: 3% 6%;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    background-color: #3c2bf3;
+    color : #eee;
+    cursor: pointer;
+    margin: 2% 0;
+	width: auto;
+}
+.form-bb .btnsubmit:hover{
+    background-color: #6558f5;
+}
+
+@media screen and (max-width : 700px){
+	.comprar .headerpay{
+		flex-direction: column;
+		align-items: center;
+	}
+	.comprar .headerpay h1{
+		margin-right: 0%;
+		text-align: center;
+		
+	}
+	.comprar .headerpay p{
+		text-align: center;
+		font-size: 1em;
+		align-self: center;
+		margin: 2% 0;
+		padding: 2%;
+	}
+	.comprar .menu .opcoes{
+		font-size: 1em;
+		padding: 1% 0.8%;
+	}
+	.opcoes svg{
+		font-size:1.8em;
+	}
+	.form-cc, .form-db, .form-bb{
+		margin: 0 1%;
+	}
+	.form-cc .cod, .form-db .cod{
+		min-width: 55%;
+	}
+	.form-cc #validade, .form-db #validade{
+		width: 55%;
+	}
+	.comprar .form-bb .juntos{
+		flex-direction: column;
+		margin: 0% 0;
+	}
+	.form-bb .dicas li{
+		margin: 1% 0;
+		font-size: .8em;
+	}
+	.dicas{
+		margin-bottom: 2%;
+	}
+	.dicas li p{
+		margin-left: 2%;
+	}
+	.dicas li svg{
+		margin: 0 25px;
+	}
+}
