@@ -12,6 +12,12 @@
 *Mudar no heroku o buildpack para mars/create-react-app
 *Depois fazer o processo do heroku cli
 
+Vercel
+Dá um vercel no diretorio
+Para atualizar da vercel --prod
+obs : não funciona no terminal do vscode
+
+
 REFERENCIAS
 https://www.youtube.com/watch?v=-j7vLmBMsEU&t=837s
 https://www.youtube.com/watch?v=DVTceFeaAdc&t=969s

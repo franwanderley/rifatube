@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import Header from '../components/header';
-import {useHistory, Link} from 'react-router-dom';
-import Footer from '../components/footer';
-import api from './../services/api';
-import './../styles/campanha.css';
+import {useHistory} from 'react-router-dom';
 import swal from 'sweetalert';
 import Cripto from './../services/CryptoConfig';
+import api from './../services/api';
+import Header from '../components/header';
+import Footer from '../components/footer';
+import './../styles/campanha.css';
 
 interface Props{
     match : {
@@ -23,7 +23,14 @@ interface CampanhaInterface{
     qtd         : number;
     situacao    : string;
     preco       : number;
-    idCriador   : number;
+    idcriador   : number;
+    idganhador  : number;
+}
+interface Usuario{
+    nome      : string;
+    sobrenome : string;
+    foto    : string;
+
 }
 interface RifaInterface{
     id         : number;
@@ -43,14 +50,18 @@ interface NumeroInterface{
 function Campanha(props : Props){
 
     function GetColumn(props : {value : NumeroInterface}){
-        if(props.value.cor === "vermelho")
-            return <td key={props.value.numero} className="td vermelho"> {props.value.numero}</td>
-        else if(props.value.cor === "cinza")
-            return <td key={props.value.numero}  onClick={() => onSelected(props.value.numero)} className="td cinza"> {props.value.numero}</td>
-        else if(props.value.numero !== '000')
-            return <td key={props.value.numero} onClick={() => onSelected(props.value.numero)} className="td">{props.value.numero}</td>
-        else
-            return <td className="td1">{props.value.numero}</td>
+        switch(props.value.cor){
+            case "vermelho" : 
+                return <td key={props.value.numero} className="td vermelho"> {props.value.numero}</td>
+            case "cinza" :
+                return <td key={props.value.numero}  onClick={() => onSelected(props.value.numero)} className="td cinza"> {props.value.numero}</td>
+            case "sem cor" :
+                return <td key={props.value.numero} className="td semcor">{props.value.numero}</td>                
+            default :{ 
+                console.log('default');
+                return <td className="td1" onClick={() => onSelected(props.value.numero)} key={props.value.numero}>{props.value.numero}</td>
+            }
+        }
     }
     function GetTable(props : {numero : NumeroInterface[]}){
         return (
@@ -66,7 +77,12 @@ function Campanha(props : Props){
 
     function comprar(){
         if(numerosSelected.length >= 1){
-            const requisicao = {numeros : numerosSelected,total : total * Number(campanha?.preco), campanhaId : campanha?.id, usuarioId : sessionStorage.getItem('rifatube/id')}
+            const requisicao = {
+                numeros : numerosSelected,
+                total : total * Number(campanha?.preco), 
+                campanhaId : campanha?.id,
+                usuarioId : sessionStorage.getItem('rifatube/id')
+            }
             history.push("/comprar",requisicao);
         }
         else{
@@ -75,16 +91,9 @@ function Campanha(props : Props){
         }
     }
 
-    function criarButtao(situacao : string | undefined){
-        if(situacao === "Finalizado")
-           return <button className="final" onClick={comprar} disabled>Campanha Finalizada</button>
-        else
-            return <button className="compra" onClick={comprar}>Finalizar Compra</button>
-
-    }
-
     function onSelected(n : string){
-        if(numerosSelected.includes(n)){//Se o id tiver sido selecionado vai ser desmarcado
+        //Se o id tiver sido selecionado vai ser desmarcado
+        if(numerosSelected.includes(n)){
             setTotal(total-1)
             const itemsfiltrados = numerosSelected.filter(numero => numero !== n);//vai tirar o item com este id
             setNumerosSelected(itemsfiltrados);
@@ -96,13 +105,36 @@ function Campanha(props : Props){
     }
 
     const history = useHistory();
+
     const [numeros,setNumeros] = useState<NumeroInterface[]>([]);
     const [total, setTotal]  = useState<number>(0);
     const [numerosSelected, setNumerosSelected] = useState<string[]>([]);
     const [campanha, setCampanha] = useState<CampanhaInterface>();
+    const [usuario, setUsuario] = useState<Usuario>();
     const [rifas, setRifas] = useState<RifaInterface[]>();
 
-    //Vai mudar
+    //Descriptografar param e buscar a campanha
+    useEffect(()=>{
+        function getParams(){
+           const idcrypto = String(props.match.params.id);
+           let id : string =  Cripto.descriptografar( idcrypto );
+           console.log("Id = "+id);
+            if(id)
+                api.get('campanha/'+ id).then(res =>{
+                    setCampanha(res.data);
+                }).catch(error => {
+                    swal({title: "Campanha não encontrado!",text : String(error), icon : "warning"});
+                });
+       }
+       //Verificar se estar logado!
+       const session = sessionStorage.getItem('rifatube/id');
+       if(session)
+           getParams();
+       else
+           history.push('/login');
+    },[props]);
+
+    //Buscar rifa por campanha
     useEffect( () => {
         api.get('rifa?idc=' + campanha?.id).then(res => {
             setRifas(res.data);
@@ -111,23 +143,19 @@ function Campanha(props : Props){
             setRifas(undefined);
         });
     },[campanha]);
-    useEffect(()=>{
-         function getParams(){
-            let id : string;
-            id =  Cripto.descriptografar( String( props.match.params.id ));
-            sessionStorage.setItem('rifatube/idcampanha',id);
-            console.log("Id = "+id);
-             if(id)
-                 api.get('campanha/'+ id).then(res =>{
-                     setCampanha(res.data);
-                 });
+
+    //Buscar Usuario ganhador
+    useEffect(() => {
+        async function pegarGanhador () {
+            const user = await api.get(`users/${campanha?.idganhador}`).then(res => {
+                return res.data as Usuario;
+            }).catch(error => undefined);
+            setUsuario(user);
         }
-        const session = sessionStorage.getItem('rifatube/id');
-        if(session)
-            getParams();
-        else
-            history.push('/login');
-     },[props]);
+        pegarGanhador();
+    }, [campanha]);
+
+     //Ajeitar os numeros e definir suas cores
      useEffect(() => {
         function getNumero(){
             let aux: NumeroInterface[] = [];
@@ -141,16 +169,15 @@ function Campanha(props : Props){
                     cor = "cinza";
 
                 if(i > x)
-                    aux.push({numero :"000", cor: cor});
+                    aux.push({numero :"000", cor: "sem cor"});
                 else if(i < 10)
                     aux.push({numero :'00'+ i, cor: cor});
                 else
                     aux.push({numero :'0'+ i, cor: cor});
-
-    
             }
             setNumeros(aux);
         }
+
         getNumero();
      }, [campanha,rifas,numerosSelected]);
 
@@ -165,8 +192,17 @@ function Campanha(props : Props){
                     <p className="preco" >{"R$ "+ campanha?.preco}</p>
                 </div>
                 <div className="section">
+                    {usuario && 
+                    <div className="ganhador">
+                        <h3>Ganhador</h3>
+                        <div>
+                            <img src={`${process.env.REACT_APP_HOST}uploads/${usuario?.foto}`} alt="ganhador"/>
+                            <p>{usuario?.nome} {usuario?.sobrenome}</p>
+                        </div>
+                    </div>
+                    }
                     <div className="rifas">
-                        <p className="data">Término:{campanha?.datasorteio}</p>
+                        <p className="data">Término: {campanha?.datasorteio}</p>
                         <GetTable numero={numeros}/>
                        <div className="details">
                             <div className="cor1"></div> <p>Disponivel</p>     
@@ -174,13 +210,11 @@ function Campanha(props : Props){
                             <div className="cor3"></div> <p>Comprada</p>
                         </div>
                         <p className="total">Total: R$ {total * Number(campanha?.preco) }</p>
-                        {criarButtao(campanha?.situacao)}
-                    </div>
-                    <div className="regra">
-
-                    </div>
-                    <div className="ganhador">
-
+                        { (campanha?.situacao === "Finalizado") ?
+                            <button className="final" onClick={comprar} disabled>Campanha Finalizada</button>
+                        :
+                            <button className="compra" onClick={comprar}>Finalizar Compra</button>
+                        }
                     </div>
                 </div>
             </div>

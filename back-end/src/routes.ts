@@ -69,8 +69,6 @@ routes.post('/users', async (req, res) => {
 });
 
  routes.get('/users', async (req, res) => { 
-     const offset = req.query.offset ? Number(req.query.offset) : 0 ;
-     const limit = req.query.limit ? Number(req.query.limit) : 100;
      const email = req.query.email ? String(req.query.email) : null;
      let senha = req.query.senha ? String(req.query.senha) : null;
 
@@ -81,7 +79,7 @@ routes.post('/users', async (req, res) => {
             if(resultado){
                 return res.json(resultado);
             }else 
-                return res.json(0);
+                return res.status(500).json(0);
           }catch (error) {
               console.log(error);
           }
@@ -116,7 +114,7 @@ routes.post('/users', async (req, res) => {
     await trx.commit();
     if(idupdate) 
         return res.json(idupdate);    
-    return res.json({message: "Usuario não atualizado!"});
+    return res.status(500).json({message: "Usuario não atualizado!"});
  });
 
  routes.put('/users/:id', async (req, res) => {
@@ -164,15 +162,15 @@ routes.put('/mudarsenha/:id', async (req, res) =>{
  });
 
  routes.get('/campanha', async (req, res) => {
-     const page     = req.query.page ? Number(req.query.page) : 1;
-     const search    = req.query.search ? String(req.query.search) : "0";
-     const idc = req.query.idc ? Number(req.query.idc) : null;
-     const idr       = req.query.idr ? Number(req.query.idr) : null;
-     if(search !== "0"){
-         console.log("Pesquisa");
+     const page   = req.query.page ? Number(req.query.page) : 1;
+     const search = req.query.search ? String(req.query.search) : "";
+     const idc    = req.query.idc ? Number(req.query.idc) : null;
+     const idr    = req.query.idr ? Number(req.query.idr) : null;
+     if(search !== "" && search){
          const offset = (page-1) * 5;
-        const resultado = await knex<Campanha>('campanha').where('produto', "like", `%${search}%`).limit(5).offset(offset);
-         if(resultado.length > 0)
+         const resultado = await knex<Campanha>('campanha').where('produto', "LIKE", `%${search}%`).limit(5).offset(offset);
+         console.log("Resultado: "+ resultado);
+         if(resultado)
              return res.json(resultado);
          else
              return res.status(500).json({
@@ -215,11 +213,19 @@ routes.put('/mudarsenha/:id', async (req, res) =>{
         //Já passou do tempo
         const hojeS = DateConfig.getHoje();
         if(DateConfig.CompareDate(hojeS,campanha.datasorteio) && campanha.situacao !== "Finalizado"){
+            //Fazer Sorteio
+            const rifas = await knex<{numero : number; idusuario : number; idcampanha: number}>('rifa').where({idcampanha : campanha?.id});
+            const numero = rifas.map(r => r.numero);
+            const aleatorio = Math.round(Math.random() * ((numero.length-1) - 0) + 0);
+            const numeroV = numero[aleatorio];
+            const rifaGanhador = rifas.find( r => r.numero === numeroV);
+
             const trx = await knex.transaction();
-            const result = await trx('campanha').where('id', '=', id).update({situacao : "Finalizado"});
+            const result = await trx('campanha').where('id', '=', id).update({situacao : "Finalizado", idganhador : rifaGanhador?.idusuario});
             await trx.commit();
             if(result){
                 campanha.situacao = "Finalizado";
+                campanha.idGanhador = rifaGanhador?.idusuario || 0;
                 return res.json(campanha);
             }
             else
@@ -231,6 +237,20 @@ routes.put('/mudarsenha/:id', async (req, res) =>{
     else
         return res.status(500).json("NÃO EXISTE CAMPANHA COM ESTE ID");
  });
+
+ routes.get('/example', async (req, res) => {
+    const campanha = {id : 6};
+    const rifas = await knex<{numero : number; idusuario : number; idcampanha: number}>('rifa').where({idcampanha : campanha?.id});
+    const numero = rifas.map(r => r.numero);
+    const aleatorio = Math.round(Math.random() * ((numero.length-1) - 0) + 0);
+    const numeroV = numero[aleatorio];
+    const rifaGanhador = rifas.find( r => r.numero === numeroV);
+    const isSucceeded = await knex('campanha').update({idganhador : rifaGanhador?.idusuario})
+    
+    return res.json({
+        usuarioId : rifaGanhador?.idusuario
+    });
+ })
 
 routes.post("/rifa", async (req, res) => {
     const {idusuario, idcampanha, situacao, data, numero, payment_id, link_boleto} = req.body;
@@ -271,34 +291,55 @@ routes.get('/rifa', async (req, res) => {
      const offset = (page -1) * limit; 
 
      let result : Rifa[];
-     if(idcampanha){
-         result =  await knex('rifa').select("*").where('idcampanha', '=', idcampanha);
-         if(result.length < 1)
-            return res.status(500).json("Não encotrado!");
-        else
-            return res.json(result);
-            
-     }else if(idusuario){
-         
-        result = await knex<Rifa[]>('rifa').where('idusuario', '=', idusuario).join('campanha', 'rifa.idcampanha', '=', 'campanha.id').select('rifa.*', 'campanha.produto').limit(limit).offset(offset);
-        //Se o boleto venceu
-        result.map(async rifa => {
-            if(rifa.situacao === "pendente"){
-                const venceu = DateConfig.venceuboleto(rifa.data);
-                //console.log( rifa.id +" "+venceu);
-                if(venceu !== 0){
-                    const idDelete = await knex('rifa').delete().where({id : rifa.id});
-                    console.log(idDelete);
+     if(idcampanha !== 0){
+         result =  await knex<Rifa>('rifa').select("*").where('idcampanha', '=', idcampanha);
+         let rifas : Rifa[] = [];
+         //Ver se o boleto venceu e deletar do banco de dados
+         result.map(async rifa => {
+            if(rifa?.situacao === "pendente"){
+                const passou = DateConfig.venceuboleto(rifa?.data);
+                if(passou !== 0){
+                    await knex('rifa').delete().where({id : rifa?.id});
+                    console.log("id da rifa "+ rifa.id);
                 }
+                else
+                    rifas.push(rifa);
             }
+            else
+                rifas.push(rifa);
         });
 
-        if(!result)
+        if(!rifas)
             return res.status(500).json("Não encotrado!");
-     }else
-        result = await knex<Rifa>('rifa').select("*");
-    
-    return res.json(result);
+        return res.json(rifas);
+            
+     }else if(idusuario !== 0){
+         //Busca Rifa(junto com  campanha) por Usuario 
+        result = await knex<Rifa[]>('rifa').where('idusuario', '=', idusuario).join('campanha', 'rifa.idcampanha', '=', 'campanha.id').select('rifa.*', 'campanha.produto').limit(limit).offset(offset);
+        
+        //Ver se o boleto venceu e deletar do banco de dados
+        let rifas : Rifa[] = [];
+        result.map(async rifa => {
+           if(rifa?.situacao === "pendente"){
+               const passou = DateConfig.venceuboleto(rifa?.data);
+               if(passou !== 0){
+                   await knex('rifa').delete().where({id : rifa?.id});
+                   console.log("id da rifa "+ rifa.id);
+               }
+               else
+                   rifas.push(rifa);
+           }
+           else
+               rifas.push(rifa);
+       });
+
+       if(!rifas)
+           return res.status(500).json("Não encotrado!");
+       return res.json(rifas);
+     }else{
+        result = await knex<Rifa>('rifa').select("*").limit(limit).offset(offset);
+        return res.json(result);
+     }
 });
 
 routes.get('/rifa/:id', async (req, res) => {
@@ -369,13 +410,12 @@ routes.post('/credito', async (req,res) => {
 
    try {
         // == (1) authorization ==
-        let access_token;
-        access_token = await axios.post("https://api-sandbox.getnet.com.br/auth/oauth/v2/token", body , config).then( (res : Resp) => {
-            console.log(res.data.access_token);
-            return res.data.access_token;
+        let access_token = await axios.post("https://api-sandbox.getnet.com.br/auth/oauth/v2/token", body , config).then( (res : Resp) => {
+            console.log("Token " + res.data.access_token);
+            return res?.data?.access_token;
         }).catch((error ) =>{
             console.log("Deu erro "+ error);
-            return ;
+            return null ;
         });
 
         if(access_token){
@@ -387,15 +427,14 @@ routes.post('/credito', async (req,res) => {
                     "Authorization" : "Bearer "+ access_token,
                 }
             };
-            let token_card;
-            token_card = await axios({method : "post", url : "https://api-sandbox.getnet.com.br/v1/tokens/card", data : { card_number : numerocartao }, headers: config.headers }).then(res => {
+            let token_card = await axios({method : "post", url : "https://api-sandbox.getnet.com.br/v1/tokens/card", data : { card_number : numerocartao }, headers: config.headers }).then(res => {
                 const {number_token} = res.data;
                 return number_token;
             }).catch(error => {
-                console.log(error);
-                return ;
+                console.log("Erro na tokenização " + error);
+                return null;
             });
-            console.log(token_card);
+            console.log("token_card " + token_card);
             if(token_card){
                 const bodyPay = {
                     "seller_id": process.env.PAY_SELLER_ID,
@@ -428,13 +467,24 @@ routes.post('/credito', async (req,res) => {
                     }
                 };
                 // == (3) Pagamento ==
-                const status = await axios({method: "post", url:"https://api-sandbox.getnet.com.br/v1/payments/credit", data: bodyPay, headers: config.headers}).then(res => {
+                const status = await axios({method: "post", url:"https://api-sandbox.getnet.com.br/v1/payments/credit", data: bodyPay, headers: config.headers})
+                .then(res => {
                     const {status} = res.data;
                     return status;
+                }).catch(error => {
+                    console.log("Erro no pagamento " + error.message);
+                    return null ;
                 });
-                return res.json(status); 
+                if(status)
+                    return res.json(status); 
+                else
+                    return res.status(500).json("Não foi possivel efetuar o pagamento");
             }
+            else
+                return res.status(500).json("Erro na tokenização do cartão");  
         }
+        else
+            return res.status(500).json("Erro na autentificação do token");
    } catch (error) {
        const {status} = error.data;
        return res.json(status);
@@ -459,11 +509,11 @@ routes.post('/boleto' ,async (req, res) => {
     body.append("grant_type", "client_credentials");
     try {
         // == (1) authorization ==
-        let access_token;
-        access_token = await axios.post("https://api-sandbox.getnet.com.br/auth/oauth/v2/token", body , config).then( (res : Resp) => {
+        let access_token = await axios.post("https://api-sandbox.getnet.com.br/auth/oauth/v2/token", body , config).then( (res : Resp) => {
             return res.data.access_token;
         }).catch((error) =>{
             console.log("Deu erro na Autenticação "+ error);
+            return null;
         });
         if(access_token){
             config.headers['Content-Type'] = "application/json; charset=utf-8";
@@ -489,25 +539,25 @@ routes.post('/boleto' ,async (req, res) => {
                   }
                 }
               };
-              let boleto;
               // == (2) Registro de Boleto ==
-              boleto = await axios({method: "post", url: "https://api-sandbox.getnet.com.br/v1/payments/boleto", data: bodyB, headers: config.headers}).then(res => {
+              let boleto = await axios({method: "post", url: "https://api-sandbox.getnet.com.br/v1/payments/boleto", data: bodyB, headers: config.headers}).then(res => {
                 const {payment_id, status} = res.data;
                 return {payment_id, status};
               }).catch(error => {
                   const {message} = error;
-                  console.log(message);
-                  return {payment_id : 0,status : "Error"}; 
+                  console.log(message || error);
+                  return {payment_id : 0, status : "Error"}; 
               });
 
               if(boleto.payment_id !== 0){
                 //== (3) Baixar Boleto ==
-                console.log("Passou");
                return res.json({status : "APROVED",link : "https://api-sandbox.getnet.com.br/v1/payments/boleto/" +  boleto.payment_id + "/pdf", pagar_id : String(boleto.payment_id)});
               }
               else
-                return res.json({status : "Error", link : "", pagar_id: ""});
+                return res.status(500).json("Não foi possivel efetuar o pagamento");
         }
+        else
+            return res.status(500).json("Erro na autenticação");
 
     } catch (error) {
         console.log(error)

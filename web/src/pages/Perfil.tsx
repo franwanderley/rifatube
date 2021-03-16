@@ -1,12 +1,14 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import api from '../services/api';
 import {Link, useHistory} from 'react-router-dom';
-import Header from './../components/header';
-import Footer from './../components/footer';
+import swal from 'sweetalert';
+
+import api from './../services/api';
 import Dropzone from './../components/upload';
 import Cripto from './../services/CryptoConfig';
+import Header from './../components/header';
+import Footer from './../components/footer';
+
 import './../styles/perfil.css';
-import swal from 'sweetalert';
 
 interface Rifa{
     id         : number;
@@ -49,19 +51,24 @@ interface Props {
 }
 function Perfil(props : Props){
     
+    function redirecionar(){
+        history.push('/login');
+    }
+
     async function updateUsuario(event : FormEvent){
         event.preventDefault();//Não atualiza a pagina
-        const data = new FormData();//Submit por multipath/form-data
+        //Submit por multipath/form-data para que possa ter upload das imagens
+        const data = new FormData();
         data.append('descricao', descricao);
-        if(selectedFile)
-            data.append('foto', selectedFile);//Imagem if => caso seja nulo
-            try{
-                await api.put('users1/'+ usuario?.id,data);//Vai conectar com o BACK_END e enviar informações do form 
-                //Tem que ir para pagina deu certo
-                swal({title : "Foto e Descrição atualizado com successo!", icon : "success"});
-            }catch(error){
-                swal({title : "Foto e Descrição não atualizado!",text : String(error), icon : "warning"});
-            }
+        selectedFile && data.append('foto', selectedFile);
+        try{
+            //Editar descrição, imagem
+            await api.put('users1/'+ usuario?.id,data); 
+            //Tem que ir para pagina deu certo
+            swal({title : "Foto e Descrição atualizado com successo!", icon : "success"});
+        }catch(error){
+            swal({title : "Foto e Descrição não atualizado!",text : String(error), icon : "warning"});
+        }
     }
     function handleDescricao(event : ChangeEvent<HTMLTextAreaElement>){
         setDescriçao(event.target.value);
@@ -88,64 +95,51 @@ function Perfil(props : Props){
     useEffect(()=>{
         async function user(){
             let id;
-            const idDescript = sessionStorage.getItem('rifatube/idDescript');
-            if(idDescript)
-                id = Number(idDescript);
-            else{
+            try{
                 id =  Cripto.descriptografar( String( props.match.params.id ));
-                sessionStorage.setItem('rifatube/idDescript',id); 
+            }catch(error){
+                swal({title: "Usuario não encotrado!", icon:"warning"}).then(res => redirecionar());
             }
-            if( Number(id) ){
-                api.get('users/'+ id).then(res => {
-                    if(res.data){
-                        setUsuario(res.data);
-                    }
-                    else{
-                        swal({title: "Usuario não encotrado!", icon: "warning"});
-                    }
-                });
+            if( id ){
+                await api.get('users/'+ id)
+                .then(res => setUsuario(res.data))
+                .catch(error => swal({title: "Usuario não encotrado!", icon: "warning"}));
             }
-
         }
         const session = sessionStorage.getItem('rifatube/id');
         if(session)
             user();
         else
-            history.push('/login');
-    },[]);
+            redirecionar();
+    },[props]);
     //Pegar imagem do back end
     useEffect(() => {
         async function pegarImagem(){
-            console.log('Usuario ' + usuario?.id);
             if(usuario){
-                const img : File =  await api.get('uploads/'+ (usuario?.foto || "")).then(res => {
-                    return res.data;
-                });
-                setSelectedFile(img);
-                return img;
+                await api.get(`uploads/${usuario?.foto}`)
+                .then(res => setSelectedFile(res.data))
+                .catch(error => setSelectedFile(undefined));
             }
         }
-        setDescriçao(usuario?.descricao ? usuario?.descricao : "");
+        setDescriçao(usuario?.descricao || "");
         pegarImagem();
     }, [usuario]);
+
     // Pegar campanha por idCriador
     useEffect(() => {
-        console.log(pageCampanha);
-        api.get('campanha?idc='+ String(usuario?.id) + '&page='+ pageCampanha ).then(res => {
-            if(res.data)
-                setCampanhas(res.data);
-            else
-                console.log(res.data);
-        }).catch(error => {
-            swal({title :'Não foi possivel obter campanha!', icon:'warning'});
-        });
-        // setCampanhas(x.filter(camp => camp.idcriador !== usuario?.id));
+        async function getCampanhas(){
+            await api.get('campanha?idc='+ usuario?.id + '&page='+ pageCampanha )
+            .then(res => setCampanhas(res.data))
+            .catch(error => setCampanhas([]));
+        }
+        getCampanhas();
     }, [usuario, pageCampanha]);
+
     //Procurar Rifa por idusuario
     useEffect(() => {
-        api.get('rifa?idu=' + usuario?.id + '&page='+ pageRifa).then(res => {
-            setRifas(res.data);
-        });
+        api.get('rifa?idu=' + usuario?.id + '&page='+ pageRifa)
+        .then(res => setRifas(res.data))
+        .catch(error => setRifas([]));
     }, [usuario, pageRifa]);
 
     return (
@@ -156,9 +150,9 @@ function Perfil(props : Props){
                         <form onSubmit={updateUsuario}>
                             <h3>Adicionar Foto do Perfil</h3>
                             <Dropzone onFileUploaded={setSelectedFile} />
-                            {usuario?.foto ? 
-                            <img src={"https://rifatubebackend.herokuapp.com/uploads/"+ usuario.foto} className="imgperfil" alt="Foto do Usuario"/>
-                             :  <br/> }
+                            { usuario?.foto && 
+                                <img src={`${process.env.REACT_APP_HOST}uploads/${usuario?.foto}`} className="imgperfil" alt="Foto do Usuario"/> 
+                            }
                             <h3>Adicionar Descrição</h3>
                             <textarea id="text" value={descricao} onChange={handleDescricao} spellCheck={true} cols={30} rows={10} placeholder="Descreva seu perfil e adicione links para sua rede social"></textarea>
                             <div className="formbtn"> 
@@ -169,12 +163,12 @@ function Perfil(props : Props){
                     </div>
                     <div className="section">
                         <div className="btn-campanha">
-                                <h4 onClick={aba1} className={'btnone ' + (abas ? 'marcado' : '')}>Minhas Campanhas</h4>
-                                <h4 onClick={aba2} className={'btntwo ' + (abas ? '' : 'marcado')}> Minhas Rifas</h4>
+                                <h4 onClick={aba1} className={'btnone ' + ( abas && 'marcado' )}>Minhas Campanhas</h4>
+                                <h4 onClick={aba2} className={'btntwo ' + ( !abas && '' )}> Minhas Rifas</h4>
                                 <Link to="/criarcampanha" className="btn-add">Adicionar Campanha</Link>
                                 <Link to="/" className="btn-ver">Ver Campanha</Link>
                         </div>
-                        <div id="minhascampanhas" className={"minhascampanhas " + (abas ? "" : "desativado")}>
+                        <div id="minhascampanhas" className={"minhascampanhas " + ( !abas && "desativado" )}>
                             <table>
                                 <tr>
                                     <th>Imagem</th>
@@ -210,7 +204,7 @@ function Perfil(props : Props){
                                 <button  onClick={() => setPageCampanha(pageCampanha +1)} disabled={pageCampanha === 5}>{'>'}</button>
                             </div>
                         </div>
-                        <div id = "minhasrifas" className={"minhasrifas " + (abas ? "desativado": "")}>
+                        <div id = "minhasrifas" className={"minhasrifas " + (abas && "desativado")}>
                         <table>
                                 <tr>
                                     <th>Campanha</th>
@@ -232,13 +226,13 @@ function Perfil(props : Props){
                                 ))}
                             </table>
                             <div className="pagination">
-                                <button  onClick={() => setPageRifa(pageRifa -1)}>{'<'}</button>
+                                <button  onClick={() => setPageRifa(pageRifa -1)} disabled={pageCampanha === 1}>{'<'}</button>
                                 <button  className={pageRifa === 1 ? "marca" : ""} onClick={() => setPageRifa(1)}>1</button>
                                 <button  className={pageRifa === 2 ? "marca" : ""} onClick={() => setPageRifa(2)}>2</button>
                                 <button  className={pageRifa === 3 ? "marca" : ""} onClick={() => setPageRifa(3)}>3</button>
                                 <button  className={pageRifa === 4 ? "marca" : ""} onClick={() => setPageRifa(4)}>4</button>
                                 <button  className={pageRifa === 5 ? "marca" : ""} onClick={() => setPageRifa(5)}>5</button>
-                                <button  onClick={() => setPageRifa(pageRifa +1)}>{'>'}</button>
+                                <button  onClick={() => setPageRifa(pageRifa +1)} disabled={pageCampanha === 5}>{'>'}</button>
                             </div>
                         </div>
                     </div>

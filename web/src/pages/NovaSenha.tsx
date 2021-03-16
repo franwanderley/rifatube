@@ -1,10 +1,12 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import {useHistory} from 'react-router-dom';
+import {FaSave} from 'react-icons/fa';
+import swal from 'sweetalert';
+
+import api from '../services/api';
 import Header from './../components/header';
 import Footer from './../components/footer';
-import swal from 'sweetalert';
-import api from '../services/api';
-import {FaSave} from 'react-icons/fa';
+
 import './../styles/novasenha.css';
 
 interface Props{
@@ -18,30 +20,20 @@ interface Props{
 function NovaSenha(props : Props){
 
     function handleSenha(event : ChangeEvent<HTMLInputElement>){
-        const aux = event.target.value;
-        setSenha(aux);
+        setSenha(event.target.value);
     }
     function handleSenha2(event : ChangeEvent<HTMLInputElement>){
-        const aux = event.target.value;
-        setSenha2(aux);
+        setSenha2(event.target.value);
     }
     async function onNewSenha(event : FormEvent){
         event.preventDefault();
-        try {
-            if(senha === senha2){
-                const data = { senha : senha };
-                await api.put('mudarsenha/'+ props.match.params.id,data).then(res => {
-                    if(res.data){
-                        swal({title :"Senha Atualizado com Sucesso",icon: "success"});
-                        history.push('/login');
-                    }
-                });
-            }else
-                swal({title: "Senhas não coincidem", text: "Tente Novamente!", icon: "warning"});
-
-        } catch (error) {
-            swal({title: "Erro no Formulario", text: String(error), icon: "warning"});
-        }
+        if(senha === senha2){
+            const data = { senha : senha };
+            await api.put('mudarsenha/'+ props.match.params.id,data)
+            .then(res => swal({title :"Senha Atualizado com Sucesso",icon: "success"}).then(() => history.push('/login')))
+            .catch(error => swal({title :"Não foi possivel mudar senha",icon: "warning"}));
+        }else
+            swal({title: "Senhas não coincidem", text: "Tente Novamente!", icon: "warning"});
     }
 
     const history = useHistory();

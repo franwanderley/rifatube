@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
+
+import api from './../services/api';
+import cripto from './../services/CryptoConfig';
 import Header from './../components/header';
 import Footer from './../components/footer';
-import api from './../services/api';
 import './../styles/home.css';
-import cripto from './../services/CryptoConfig';
 
 interface Campanha {
     id          : number;
@@ -27,27 +28,27 @@ interface Props{
 function Home(props : Props){
 
     const [campanhas,setCampanhas] = useState<Campanha[]>([]);
-    const [search,setSearch] = useState<string>("0");
     const [pageCampanha, setPageCampanha] = useState<number>(1);
 
-    useEffect(()=>{
-        setSearch(String(props.location.state));
-    }, [props])
+    //Pegar campanha por pesquisa
+    useEffect( () => {
+        async function pesquisa()  {
+            const search = props.location.state;
+             if(search){
+                await api.get(`campanha?search=${search}&page=${pageCampanha}`)
+                .then(res => setCampanhas(res.data))
+                .catch(error => setCampanhas([]) );
+            }else{
+                await api.get(`campanha?page=${pageCampanha}`)
+                .then( res => setCampanhas(res.data))
+                .catch(error => setCampanhas([]));
+            }
+        }
 
-    useEffect( ()=>{
-        console.log(search || "");
-        if(search){
-            api.get('campanha?search='+(search || "0")+ '&page='+pageCampanha).then((res)=>{
-                if(res.status !== 500)
-                    setCampanhas(res.data);
-                else
-                    setCampanhas([]);
-            });
-        }else
-            api.get('campanha').then((res)=>{
-                setCampanhas(res.data);
-            });
-     },[search, pageCampanha]);
+        pesquisa();
+     },[props, pageCampanha]);
+
+
      return (
         <div className="content">
             <Header />
@@ -60,7 +61,7 @@ function Home(props : Props){
                            <img src={c.imagem} alt={c.produto}/>
                            <progress max={c.qtdmax} value={c.qtd}></progress>
                            <div className="link">
-                             <Link  className={"participar " + (c.situacao === "Finalizado" ? "fim" : "")}  to={"campanha/"+ cripto.criptografar(String(c.id))}>{c.situacao === "Finalizado" ? "Finalizado" : "Participar"}</Link>
+                             <Link className={"participar " + (c.situacao === "Finalizado" ? "fim" : "")}  to={"campanha/"+ cripto.criptografar(String(c.id))}>{c.situacao === "Finalizado" ? "Finalizado" : "Participar"}</Link>
                              <Link className={"preco " + (c.situacao === "Finalizado" ? "fim" : "")} to={"campanha/"+ cripto.criptografar(String(c.id))}>{"R$ "+ c.preco}</Link>
                             </div>
                        </div>

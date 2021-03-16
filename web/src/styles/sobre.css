@@ -1,0 +1,30 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:center;
+}
+.sobre{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width : 80%;
+}
+.sobre h2{
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+.sobre p{
+    font-size:1rem;
+    margin: 1rem 0;
+}
+.sobre h3{
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+.sobre li{
+    margin: .3rem 0;
+    font-size: 1rem;
+}

@@ -1,12 +1,14 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
-import api from './../services/api';
+import React, { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 import { Link,useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
-import Footer from '../components/footer';
+
+import api from './../services/api';
+import Cripto from '../services/CryptoConfig';
 import Header from '../components/header';
+import Footer from '../components/footer';
+
 import logo from './../images/logo.png';
 import './../styles/login.css';
-import Cripto from '../services/CryptoConfig';
 
 interface User{
         id : number;
@@ -14,8 +16,16 @@ interface User{
         influenciador : boolean;
 }
 
+interface LoginProps{
+   location :{
+       state:{
+            email? : string;
+            senha? : string;
+       }
+   }
+}
 
-function Login(){
+function Login(props : LoginProps){
 
     function guardarUsuario(x : User){
         sessionStorage.setItem('rifatube/id', String(x?.id));
@@ -23,17 +33,12 @@ function Login(){
         sessionStorage.setItem('rifatube/influencer', String(x?.influenciador));
         history.push("/");
     }
-    function limparSessao(){
-        if(sessionStorage.getItem('rifatube/id')){
-            sessionStorage.clear();
-        }
-    }   
     async function onLogin(event : FormEvent){
-        event.preventDefault();//Para não atualizar a pagina ao enviar
+        event.preventDefault();
+
         try {
             const senhacripto = Cripto.criptografar(senha);
             const result = await api.get(`/users?email=${email}&senha=${senhacripto}`).then(res => {
-            //   setUsuario(res.data);
                 return res.data;
             } );
             if(result){
@@ -47,43 +52,55 @@ function Login(){
         }
     }
     function handleemail(event : ChangeEvent<HTMLInputElement>){
-        const aux = String(event.target.value);
-        setEmail(aux);
+        setEmail(event.target.value);
     }
     function handlesenha(event : ChangeEvent<HTMLInputElement>){
-        const aux = String(event.target.value);
-        setSenha(aux);
+        setSenha(event.target.value);
     }
 
     const history = useHistory();
     const [email, setEmail] = useState<string>("");
     const [senha, setSenha] = useState<string>("");
-    // const [usuario, setUsuario] = useState<User>();
+
+    //limpar a sessão ao redirecionar para login
+    useEffect(() => {
+        if(sessionStorage.getItem('rifatube/id')){
+            sessionStorage.clear();
+        }
+    },[]);
+
+    //pegar os parametros da pagina registrar
+    useEffect(() => {
+        setEmail(props?.location?.state?.email || "");
+        setSenha(props?.location?.state?.senha || "");
+    }, [props]);
+
 
     return (
         <div className="container">
-            {limparSessao()}
             <Header/>
             
             <div className="login">
-            <form onSubmit={onLogin} className="form-login">
-                <img src={logo} alt="RifaTube"/>
-                
-                <div className="divemail">
-                    <label htmlFor="email">Email</label>
-                    <input type="email" id="email" onChange={handleemail} placeholder="Seu E-mail" required/>
-                </div>
-                <div className="divsenha">
-                    <label htmlFor="senha">Senha</label>
-                    <input type="password" id="senha" onChange={handlesenha} placeholder="Sua Senha" required/>
-                </div>
+                <form onSubmit={onLogin} className="form-login">
+                    <img src={logo} alt="RifaTube"/>
+                    
+                    <div className="divemail">
+                        <label htmlFor="email">Email</label>
+                        <input type="email" value={email} id="email" onChange={handleemail} placeholder="Seu E-mail" required/>
+                    </div>
 
-               <div className="btn">
-                <button type="submit" className="btn-entrar">Entrar</button>
-                <Link to="/registrar"  className="btn-registrar">Registrar</Link>
-               </div>
-               <Link to="/mandaremail" className="esqsenha">Esqueceu a Senha?</Link>
-            </form>
+                    <div className="divsenha">
+                        <label htmlFor="senha">Senha</label>
+                        <input type="password" id="senha" onChange={handlesenha} value={senha} placeholder="Sua Senha" required/>
+                    </div>
+
+                    <div className="btn">
+                        <button type="submit" className="btn-entrar">Entrar</button>
+                        <Link to="/registrar"  className="btn-registrar">Registrar</Link>
+                    </div>
+
+                    <Link to="/mandaremail" className="esqsenha">Esqueceu a Senha?</Link>
+                </form>
             </div>
 
             <Footer/>

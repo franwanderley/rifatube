@@ -1,67 +1,48 @@
 import React, {useState, ChangeEvent, FormEvent, useEffect} from 'react';
-import Header from '../components/header';
-import Footer from '../components/footer';
-import api from '../services/api';
-import "./../styles/createcampanha.css";
 import { useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
 
+import api from '../services/api';
+import Header from '../components/header';
+import Footer from '../components/footer';
+import "./../styles/createcampanha.css";
+
 function CreateCampanha(){
 
+    //Pegar hoje no formato yyyy-mm-dd
     function getHoje() {
-        let date = new Date();
-        let day = date.getDate();
-        let month = date.getMonth() + 1;
-        let year = date.getFullYear()
-        let formatterDay;	
-        if (day < 10) {
-            formatterDay = '0'+ day;
-        } else {
-            formatterDay = day;
-        }
- 
-        let formatterMonth;	
-        if (month < 10) {
-            formatterMonth = '0'+ month;
-        } else {
-            formatterMonth = month;
-        }
-        const x = (year + '-' + formatterMonth + '-' + formatterDay);
-        return x;
+        let teste = (new Date()).toLocaleDateString(); //toLocaleDateString
+        let date = teste.split('/');
+        const dateformat = date.reverse().join('-');
+        return dateformat;
     }
-
+    function redirecionar(){
+        history.push('/');
+    }
      //Vai salvar os inputs ao escrever
-     function handleProduto(event : ChangeEvent<HTMLInputElement>){
-        //console.log(event.target.value);   
-        const aux = event.target.value;//Vai guarda o nome do input e o valor
-        setProduto(aux);//Tá pegando a mesma expressão,pega cada atributo e muda
+    function handleProduto(event : ChangeEvent<HTMLInputElement>){
+        setProduto(event.target.value);
     }
-     function handleImagem(event : ChangeEvent<HTMLInputElement>){
-         //console.log(event.target.value);   
-         const aux = event.target.value;//Vai guarda o nome do input e o valor
-         setImagem(aux);//Tá pegando a mesma expressão,pega cada atributo e muda
+    function handleImagem(event : ChangeEvent<HTMLInputElement>){
+        setImagem(event.target.value);
     }
-     function handleData(event : ChangeEvent<HTMLDataElement>){
-          //console.log(event.target.value);   
-          const aux = event.target.value.toLocaleString();//Vai guarda o nome do input e o valor
-          setDate(aux);//Tá pegando a mesma expressão,pega cada atributo e muda
+    function handleData(event : ChangeEvent<HTMLDataElement>){
+        const aux = event.target.value;
+        //Transformar yyyy-mm-dd para dd/mm/yyyy
+        const dateFormart = aux.split('-').reverse().join("/");
+        console.log(dateFormart);   
+        setDate(dateFormart);
     }
-     function handleQtdMax(event : ChangeEvent<HTMLInputElement>){
-         //console.log(event.target.value);   
-        const aux = Number(event.target.value);
-        setQtdmax(aux);//Tá pegando a mesma expressão,pega cada atributo e muda
+    function handleQtdMax(event : ChangeEvent<HTMLInputElement>){
+        setQtdmax(Number(event.target.value));
     }
-     function handlePreco(event : ChangeEvent<HTMLInputElement>){
-          const aux = Number(event.target.value);//Vai guarda o nome do input e o valor
-          setPreco(aux);//Tá pegando a mesma expressão,pega cada atributo e muda
+    function handlePreco(event : ChangeEvent<HTMLInputElement>){
+        setPreco(Number(event.target.value));
     }
     async function onSave(event : FormEvent<HTMLFormElement>){
         event.preventDefault();//Para não atualizar a pagina ao enviar
         const idCriador = sessionStorage.getItem('rifatube/id');
         //Formatar Datas
-        const arrdate = datasorteio.split('-').reverse();
-        const datFormat = arrdate.join('/');
-        setDate(datFormat)
         const data = {
          produto, imagem, datasorteio,qtdmax, preco, qtd : 0, situacao : "aberto", idCriador 
         };
@@ -87,7 +68,7 @@ function CreateCampanha(){
     useEffect(() => {
         const session = sessionStorage.getItem('rifatube/id');
         if(! session)
-            history.push('/login');
+            redirecionar();
     }, []);
 
     return (

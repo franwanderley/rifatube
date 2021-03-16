@@ -1,12 +1,14 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import api from './../services/api';
 import { Link,useHistory } from 'react-router-dom';
-import Footer from '../components/footer';
-import Header from '../components/header';
-import logo from './../images/logo.png';
-import Cripto from './../services/CryptoConfig';
-import './../styles/registrar.css';
 import swal from 'sweetalert';
+
+import api from './../services/api';
+import Cripto from './../services/CryptoConfig';
+import Header from '../components/header';
+import Footer from '../components/footer';
+
+import logo from './../images/logo.png';
+import './../styles/registrar.css';
 
 interface Props{
     location : {
@@ -17,67 +19,55 @@ interface Props{
 function Registrar(props : Props){
     //Funções
     function handleemail(event : ChangeEvent<HTMLInputElement>){
-        const aux = String(event.target.value);
-        setEmail(aux);
-
+        setEmail(event.target.value);
     }
     function handlesenha(event : ChangeEvent<HTMLInputElement>){
-        const aux = String(event.target.value);
-        setSenha(aux);
+        setSenha(event.target.value);
     }
     function handlenome(event : ChangeEvent<HTMLInputElement>){
-        const aux = String(event.target.value);
-        setNome(aux);
+        setNome(event.target.value);
     }
     function handlesobrenome(event : ChangeEvent<HTMLInputElement>){
-        const aux = String(event.target.value);
-        setSobrenome(aux);
+        setSobrenome(event.target.value);
     }  
     function handleendereco(event: ChangeEvent<HTMLInputElement>){
-        const aux = String(event.target.value);
-        setEndereco(aux);
+        setEndereco(event.target.value);
     }
     function handleddd(event : ChangeEvent<HTMLInputElement>){
-        const aux = String(event.target.value);
-        setDDD(aux);
+        setDDD(event.target.value);
     }
     function handlecelular(event : ChangeEvent<HTMLInputElement>){
-        const aux = String(event.target.value);
-        setFone(aux);
+        setFone(event.target.value);
     }
     function handleinfluenciador(event : ChangeEvent<HTMLInputElement>){
-        const aux = Boolean(event.target.value);
-        setInfluenciador(aux);
+        setInfluenciador(Boolean(event.target.value));
     }
 
     async function onRegistre(event : FormEvent){
-        event.preventDefault();//Para não atualizar a pagina ao enviar
-        // submit com JSON(Não permite arquivos)
+        //Para não atualizar a pagina ao enviar
+        event.preventDefault();
+
         const telefone = DDD + " " + fone;
         const senhaCripto = Cripto.criptografar(senha);
-        console.log(senhaCripto);
-        setSenha(senhaCripto);
         const data = {
-            email : email, senha : senhaCripto, nome : nome, sobrenome : sobrenome, endereco : endereco, telefone : telefone, influenciador : influenciador
+            email         : email,
+            senha         : senhaCripto,
+            nome          : nome,
+            sobrenome     : sobrenome,
+            endereco      : endereco,
+            telefone      : telefone,
+            influenciador : influenciador
         }; 
 
         //submit
-        try{
-            let id;
-            if(props.location.state)
-                id = await api.put('users/'+ props.location.state,data);
-            else
-                id = await api.post('users',data);//Vai conectar com o BACK_END e enviar informações do form 
-            //Tem que ir para pagina deu certo
-            swal({title: "Usuario Atualizado com Sucesso", icon: "success"});
-            //Salvar na Sessão
-            sessionStorage.setItem("rifatube/id", String(id.data));
-            sessionStorage.setItem('rifatube/nome', String(nome));
-            sessionStorage.setItem('rifatube/influencer', String(influenciador));
-             history.push('/');//vai redimensionar para outra rota
-        }catch(error){
-            swal({title : "Erro no Formulario", text : String(error), icon : "warning"});
-        }
+        if(props.location.state)
+            await api.put(`users/${props.location.state}`, data)
+            .then(res => swal({title: "Usuario salvo com Sucesso", icon: "success"}).then(() => history.push('/login', {email, senha})))
+            .catch(error => swal({title: "Não foi possivel salvar o usuario!", icon: "warning"}));
+        else
+            await api.post('users',data)                
+            .then(res => swal({title: "Usuario atualizado com Sucesso", icon: "success"}).then(() => history.push('/login', {email,senha})))
+            .catch(error => swal({title: "Não foi possivel salvar o usuario!", icon: "warning"}));
     }
     const history = useHistory();//Para redimensionar o usuario
     //State
@@ -90,26 +80,27 @@ function Registrar(props : Props){
      const [fone, setFone]                   = useState<string>("");
      const [influenciador, setInfluenciador] = useState<boolean>(false);
     
+     //Pegar dados do usuario cajo seja para editar
     useEffect(()=>{
-       function getUsers(){
+       async function getUsers(){
             const id = props.location.state;
-            console.log(id);
             if(id){
-                api.get('users/'+ id).then(res => {
-                const {id, email, senha, nome, endereco, sobrenome, telefone, influenciador} = res.data;
+                const { email, senha, nome, endereco, sobrenome, telefone, influenciador} = await api.get(`users/${id}`)
+                .then(res => res.data);
+
                 const aux : string[] = telefone.split(' ');
-                console.log(id);
                 setEmail(email);
-                const senhadescript = Cripto.descriptografar(senha);
-                setSenha(senhadescript);
-                console.log(senhadescript);
+                let senhadescript;
+                try{
+                    senhadescript = Cripto.descriptografar(senha);
+                }catch(error){}
+                setSenha(senhadescript || "");
                 setNome(nome);
                 setEndereco(endereco);
                 setSobrenome(sobrenome);
                 setDDD(aux[0]);
                 setFone(aux[1]);
                 setInfluenciador(influenciador);
-                });
             } 
        }
        getUsers();
@@ -125,19 +116,19 @@ function Registrar(props : Props){
                         
                         <div className="divemail">
                             <label htmlFor="email">Email</label>
-                            <input type="email" value={email ? email : ""} onChange={handleemail} id="email" required/>
+                            <input type="email" value={email || ""} onChange={handleemail} id="email" required/>
                         </div>
                         <div className="divsenha">
                             <label htmlFor="senha">Senha</label>
-                            <input type="password" value={senha ? senha : ""} onChange={handlesenha} id="senha" required/>
+                            <input type="password" value={senha || ""} onChange={handlesenha} id="senha" required/>
                         </div>
                         <div className="divnome">
                             <label htmlFor="nome">Nome</label>
-                            <input type="text" value={nome ? nome : ""} id="nome" onChange={handlenome} required/>
+                            <input type="text" value={nome || ""} id="nome" onChange={handlenome} required/>
                         </div>
                         <div className="divsobrenome">
                             <label htmlFor="sobrenome">Sobrenome</label>
-                            <input type="text" value={sobrenome ? sobrenome : ""} id="sobrenome" onChange={handlesobrenome} required/>
+                            <input type="text" value={sobrenome || ""} id="sobrenome" onChange={handlesobrenome} required/>
                         </div>
                     </div>
 
@@ -145,11 +136,11 @@ function Registrar(props : Props){
                         <h3>Preencha mais<br/> alguns dados...</h3>
                         <div className="divendereco">
                             <label htmlFor="endereco">Endereço</label>
-                            <input type="text" value={endereco ? endereco : ""} id="endereco" onChange={handleendereco} required/>
+                            <input type="text" value={endereco || ""} id="endereco" onChange={handleendereco} required/>
                         </div>
                         <div className="divcelular">
-                            <input type="text"  className="ddd" value={DDD ? DDD : ""} onChange={handleddd} placeholder="DDD"/>
-                            <input type="text" className="numero" value={fone ? fone : ""} onChange={handlecelular} required placeholder="CELULAR"/>
+                            <input type="text"  className="ddd" value={DDD || ""} onChange={handleddd} placeholder="DDD"/>
+                            <input type="text" className="numero" value={fone || ""} onChange={handlecelular} required placeholder="CELULAR"/>
                         </div>
                         <div className="divinfluencer">
                             <label htmlFor="influencer">Influenciador</label>
