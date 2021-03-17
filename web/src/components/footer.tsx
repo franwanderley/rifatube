@@ -1,7 +1,8 @@
 import React from 'react';
-import logo2 from './../images/logo-2.png';
-import {FaInstagram, FaFacebook, FaYoutube} from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import {FaInstagram, FaFacebook, FaYoutube} from 'react-icons/fa';
+
+import logo2 from './../images/logo-2.png';
 import './../styles/footer.css';
 
 function Footer(){

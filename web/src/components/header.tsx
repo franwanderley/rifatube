@@ -1,10 +1,12 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import {Link, useHistory } from 'react-router-dom';
-import {FaBars, FaTimesCircle} from 'react-icons/fa';
-import Logo from './../images/logo.png';
-import {FaSearch} from 'react-icons/fa';
+import {FaBars,FaSearch, FaTimesCircle} from 'react-icons/fa';
+
 import Cripto from './../services/CryptoConfig';
+
+import Logo from './../images/logo.png';
 import './../styles/header.css';
+import { preProcessFile } from 'typescript';
 
 
 function Header(){
@@ -14,44 +16,42 @@ function Header(){
 
     //Assim que o input muda Cai nessa função
     function openMenu(){
-        if(menuActive === 0)
-            setMenuActive(1);
-        else
+        (menuActive === 0) ?
+            setMenuActive(1)
+        :
             setMenuActive(0);
     }
-    function perfil(param : Number){
-        if(param){
-            const id = sessionStorage.getItem('rifatube/id');
-            if(id)
-                return <div className={"perfil "}>
-                    <Link to={'/perfil/' + Cripto.criptografar(id)}>{sessionStorage.getItem('rifatube/nome')}</Link>
-                    <Link to='/login'>Sair</Link>
-                </div>;
-            else 
-                return <div className={"perfil "}>
-                <Link to='/login'>Entrar</Link>
-                <Link to='/registrar'>Registrar</Link>
-            </div>;
-            //Perfil Responsivo
-        }else{
-            const id = Number(sessionStorage.getItem('rifatube/id'));
-            if(id)
-                return <div className={"perfil2 " + (menuActive ? "open" : "")}>
-                    <Link to={'/perfil/'+ id}>{sessionStorage.getItem('rifatube/nome')}</Link>
-                    <Link to='/login'>Sair</Link>
-                </div>;
-            else 
-                return <div className={"perfil2 " + (menuActive ? "open" : "")}>
-                <Link to='/login'>Entrar</Link>
-                <Link to='/registrar'>Registrar</Link>
-            </div>;
-        }
+
+    function perfil(){
+        const id = sessionStorage.getItem('rifatube/id');
+        return (id) ?
+            <div className={"perfil "}>
+                <Link to={'/perfil/' + Cripto.criptografar(id)}>{sessionStorage.getItem('rifatube/nome')}</Link>
+                <Link to='/login'>Sair</Link>
+            </div>
+        : 
+            <div className={"perfil "}>
+            <Link to='/login'>Entrar</Link>
+            <Link to='/registrar'>Registrar</Link>
+        </div>;
+    }
+    function perfilResp(){
+        //Perfil Responsivo
+        const id = sessionStorage.getItem('rifatube/id');
+        return (id) ?
+            <div className={"perfil2 " + (menuActive && "open")}>
+                <Link to={'/perfil/'+ Cripto.criptografar(id)}>{sessionStorage.getItem('rifatube/nome')}</Link>
+                <Link to='/login'>Sair</Link>
+            </div>
+        : 
+            <div className={"perfil2 " + (menuActive && "open")}>
+            <Link to='/login'>Entrar</Link>
+            <Link to='/registrar'>Registrar</Link>
+        </div>;
         
     }
     function handleInputChange(event: ChangeEvent<HTMLInputElement>){
-
-        const s = String(event.target.value);
-        setSearch(s);
+        setSearch(event.target.value);
     }
     //função para pesquisar
     function onSearch(event : FormEvent){
@@ -75,19 +75,19 @@ function Header(){
                  <input type="search" placeholder="Pesquisar Campanhas"  className="input-search" onChange={handleInputChange}/>
                  <button type="submit"> <FaSearch/> </button>
                 </form>
-                {perfil(1)}
+                {perfil()}
 
-                <nav className={"menu " + (menuActive ? "open" : "")}>
+                <nav className={"menu " + (menuActive && "open")}>
                     <ul>
                     <li><Link to="/">Home</Link></li>
                     <li><Link to="sobre">Sobre</Link></li>
                     <li><Link to="termos">Termos de Uso</Link></li>
                     </ul>
-                    <form className={"form-search " + (menuActive ? "open" : "")} onSubmit={onSearch}>
+                    <form className={"form-search " + (menuActive && "open")} onSubmit={onSearch}>
                         <input type="search" placeholder="Pesquisar Campanhas"  className="input-search" onChange={handleInputChange}/>
                         <button type="submit"> <FaSearch/> </button>
                     </form>
-                    {perfil(0)}
+                    {perfilResp()}
                 </nav>
             
             </header>
