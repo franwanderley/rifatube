@@ -1,14 +1,14 @@
 
-    <h1>Rifatube</h1>
+<h1>Rifatube</h1>
 
-    <p>É um site de sorteio de produtos para fins sociais, com pagamento
-    (atualmente está em sandbox). Feito com SQLite3, NodeJS, ReactJS.</p>
+<p>É um site de sorteio de produtos para fins sociais, com pagamento
+(atualmente está em sandbox). Feito com SQLite3, NodeJS, ReactJS.</p>
 
-    <img src="https://github.com/franwanderley/rifatube/blob/master/Rifatube.jpg?raw=true" alt="rifatube">
+<img src="https://github.com/franwanderley/rifatube/blob/master/Rifatube.jpg?raw=true" alt="rifatube">
 
-    <p>Para testar, clique neste <a href="https://rifatube.herokuapp.com/">link</a>
-        lembrando que o pagamento está ainda no ambiente de desenvolvimento.
-        Para testar use este cartão de teste: 5155901222280001, João da Silva, 21/22 123</p>
+<p>Para testar, clique neste <a href="https://rifatube.herokuapp.com/">link</a>
+    lembrando que o pagamento está ainda no ambiente de desenvolvimento.
+    Para testar use este cartão de teste: 5155901222280001, João da Silva, 21/22 123</p>
 
 <h2> <g-emoji class="g-emoji" alias="rocket" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f680.png">🚀</g-emoji>Tecnologias usadas </h2> 
 <ul>
