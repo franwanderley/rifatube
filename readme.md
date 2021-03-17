@@ -4,7 +4,7 @@
 <p>É um site de sorteio de produtos para fins sociais, com pagamento
 (atualmente está em sandbox). Feito com SQLite3, NodeJS, ReactJS.</p>
 
-<img src="https://github.com/franwanderley/rifatube/blob/master/Rifatube.jpg?raw=true" alt="rifatube">
+<img src="https://github.com/franwanderley/rifatube/blob/master/Rifatube.jpg" alt="rifatube">
 
 <p>Para testar, clique neste <a href="https://rifatube.herokuapp.com/">link</a>
     lembrando que o pagamento está ainda no ambiente de desenvolvimento.
