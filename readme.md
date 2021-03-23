@@ -36,7 +36,7 @@
     <li> Criar um arquivo chamado .env para guardar chaves</li>
     <li> Preencher EMAIL_USER como um e-mail real.</li>
     <li> Preencher EMAIL_PASS com a senha deste e-mail</li>
-    <li>Entrar ou criar uma conta no <a href="http://developers.getnet.com.br/login" alt="Sandbox do Getnet">Sandbox do Getnet</a></li>
+    <li>Entrar ou criar uma conta no <a href="http://developers.getnet.com.br/login"  alt="Sandbox do Getnet">Sandbox do Getnet</a></li>
     <li> Preencher PAY_AUTH dado pelo sandbox.</li>
     <li>Preencher PAY_SELLER_ID dado também pelo sandbox</li>
     <li>npm run dev</li>
