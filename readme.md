@@ -1,5 +1,5 @@
 
-<h1>Rifatube</h1>
+<h1 style="text-align: center">Rifatube</h1>
 
 <p>É um site de sorteio de produtos para fins sociais, com pagamento
 (atualmente está em sandbox). Feito com SQLite3, NodeJS, ReactJS.</p>
@@ -25,13 +25,13 @@
 <h2> <g-emoji class="g-emoji" alias="information_source" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png">ℹ️</g-emoji> Como Usar no seu PC</h2>
 <ul>
     <li>Dá um git clone neste repositorio</li>
-    <li>Entra no cmd na pasta que colocou este repositorio</li>
-    <li>cd back-end</li>
+    <li>Dá um cd na pasta que colocou este repositorio</li>
 </ul>
 
 <h3>NodeJS</h3>
 <ul>
     <li> Antes de Usar é preciso ter instalado o Node >= 12 e o npm >= 6</li>
+    <li>cd back-end</li>
     <li> npm install</li>
     <li> Criar um arquivo chamado .env para guardar chaves</li>
     <li> Preencher EMAIL_USER como um e-mail real.</li>
@@ -55,5 +55,4 @@
 <h2> <g-emoji class="g-emoji" alias="memo" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f4dd.png">📝</g-emoji> Falta Fazer</h2>
 <ul>
     <li>Pagamento via debito</li>
-    <li>Alguns Ajustes para ficar mais responsivel</li>
 </ul>
