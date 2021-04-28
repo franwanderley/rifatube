@@ -6,7 +6,7 @@
 
 <img src="https://github.com/franwanderley/rifatube/blob/master/Rifatube.jpg" alt="rifatube">
 
-<p>Para testar, clique neste <a href="https://rifatube.herokuapp.com/">link</a>
+<p>Para usar-lo, clique neste <a href="https://rifatube.herokuapp.com/">link</a>
     lembrando que o pagamento está ainda no ambiente de desenvolvimento.
     Para testar use este cartão de teste: 5155901222280001, João da Silva, 21/22 123</p>
 
