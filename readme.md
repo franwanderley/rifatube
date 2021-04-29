@@ -22,7 +22,7 @@
 </ul>
 
 
-<h2> <g-emoji class="g-emoji" alias="information_source" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2139.png">ℹ️</g-emoji> Como Usar no seu PC</h2>
+<h2>📓 Como Usar no seu PC</h2>
 <ul>
     <li>Dá um git clone neste repositorio</li>
     <li>Dá um cd na pasta que colocou este repositorio</li>
