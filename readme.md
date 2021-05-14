@@ -22,7 +22,7 @@
 </ul>
 
 
-<h2>📓 Como Usar no seu PC</h2>
+<h2>💻 Como Usar no seu PC</h2>
 <ul>
     <li>Dá um git clone neste repositorio</li>
     <li>Dá um cd na pasta que colocou este repositorio</li>
