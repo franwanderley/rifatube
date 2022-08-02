@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import Axios from 'axios';
@@ -71,31 +71,6 @@ function Comprar(props : Props){
         }
         else
           return "";
-    }
-    function handleNumeroCartao(event : ChangeEvent<HTMLInputElement>){
-      setNumeroCartao(event.target.value);
-    }
-    function handleNomeCartao(event : ChangeEvent<HTMLInputElement>){
-      setNomeCartao(event.target.value);
-    }
-    function handleValidade(event : ChangeEvent<HTMLInputElement>){
-      setValidade(event.target.value);
-    }
-    function handleCodigo(event : ChangeEvent<HTMLInputElement>){
-      setCodigo(event.target.value);
-    }
-    function handleCep(event : ChangeEvent<HTMLInputElement>){
-      setCep(event.target.value);
-    }
-    function handleNumeroCasa(event : ChangeEvent<HTMLInputElement>){
-      const numero = Number(event.target.value);
-      setNumeroCasa(numero);
-    }
-    function handleDocumentType(event : ChangeEvent<HTMLSelectElement>){
-        setDocumentType(event.target.value);
-    }
-    function handleDocumentNumber(event : ChangeEvent<HTMLInputElement>){
-        setDocumentNumber(event.target.value);
     }
      async function onPayCC(event : FormEvent){
        event.preventDefault();
@@ -260,21 +235,42 @@ function Comprar(props : Props){
               <form className="form-cc" onSubmit={onPayCC}>
               <div className="ncartao">
                 <label htmlFor="numerocartao">Numero do Cartão:</label>
-                <input type="text" id="numerocartao" onChange={handleNumeroCartao} placeholder="0000 0000 0000 0000 000" required/>
+                <input
+                  type="text" 
+                  id="numerocartao" 
+                  onChange={e => setNumeroCartao(e.target.value)} 
+                  placeholder="0000 0000 0000 0000 000" required
+                />
               </div>
                 <div className="nomecartao">
                   <label htmlFor="nomecartao">Nome:</label>
-                  <input type="text" id="nomedocartao" onChange={handleNomeCartao} placeholder="Como está escrito no cartão" required/>
+                  <input
+                    type="text"
+                    id="nomedocartao"
+                    onChange={e => setNomeCartao(e.target.value)} 
+                    placeholder="Como está escrito no cartão" required
+                  />
                 </div>
                 <div className="juntos">
                   <div className="validade">
                     <label htmlFor="validade">Validade:</label>
-                    <input type="text" onChange={handleValidade} placeholder="MM/AA" id="validade" required/>
+                    <input
+                      type="text"
+                      onChange={e => setValidade(e.target.value)}
+                      placeholder="MM/AA"
+                      id="validade" required
+                    />
                   </div>
 
                   <div className="cod">
                     <label htmlFor="codigo">Codigo de Segurança:</label>
-                    <input type="number" id="codigo" onChange={handleCodigo} placeholder="CVV" required maxLength={3} />
+                    <input 
+                      type="number"
+                      id="codigo"
+                      onChange={e => setCodigo(e.target.value)}
+                      placeholder="CVV"
+                      required maxLength={3} 
+                    />
                   </div>
                 </div>
                 <input type="submit" className="btnsubmit" value="Finalizar Pagamento"/>
@@ -318,24 +314,44 @@ function Comprar(props : Props){
                 <div className="juntos">
                   <div className="cep">
                     <label htmlFor="cep">Cep</label>
-                    <input type="text" onChange={handleCep} placeholder="00000-000" id='cep' maxLength={8} minLength={8} required/>
+                    <input
+                      type="text"
+                      onChange={e => setCep(e.target.value)}
+                      placeholder="00000-000"
+                      id="cep"
+                      maxLength={8}
+                      minLength={8} required
+                    />
                   </div>
                   <div className="numerocasa">
                     <label htmlFor="numerocasa">Numero da Casa</label>
-                    <input type="number" placeholder="ex: 1000" onChange={handleNumeroCasa}  id="numerocasa" required maxLength={6}/>
+                    <input
+                      type="number" 
+                      placeholder="ex: 1000"
+                      onChange={e => setNumeroCasa(Number(e.target.value))}
+                      id="numerocasa"
+                      required 
+                      maxLength={6}
+                    />
                   </div>
                 </div>
                 <div className="juntos">
                   <div className="cep">
                     <label htmlFor="documentype">Tipo de Documento</label>
-                    <select onChange={handleDocumentType} required id="documentype">
+                    <select onChange={e => setDocumentType(e.target.value)} required id="documentype">
                       <option value="CPF">CPF</option>
                       <option value="CNPJ">CNPJ</option>
                     </select>
                   </div>
                   <div className="numerocasa">
                     <label htmlFor="documentnumber"> {documentType} </label>
-                    <input type="number" onChange={handleDocumentNumber} id="documentnumber" minLength={11} maxLength={14} required/>
+                    <input
+                      type="number"
+                      onChange={e => setDocumentNumber(e.target.value)} 
+                      id="documentnumber"
+                      minLength={11}
+                      maxLength={14} required
+                    />
                   </div>
                 </div>
                 <input type="submit" className="btnsubmit" value="Gerar Boleto"/>

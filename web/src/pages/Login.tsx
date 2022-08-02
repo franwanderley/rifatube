@@ -27,33 +27,26 @@ interface LoginProps{
 
 function Login(props : LoginProps){
 
-    function guardarUsuario(x : User){
+    function saveUser(x : User){
         sessionStorage.setItem('rifatube/id', String(x?.id));
         sessionStorage.setItem('rifatube/nome', String(x?.nome));
         sessionStorage.setItem('rifatube/influencer', String(x?.influenciador));
         history.push("/");
     }
+
     async function onLogin(event : FormEvent){
         event.preventDefault();
 
-        try {
-            const senhacripto = Cripto.criptografar(senha);
-            const result = await api.get(`/users?email=${email}&senha=${senhacripto}`).then(res => {
-                return res.data;
-            } );
-            if(result){
-            guardarUsuario(result);
-            }
-            else if(result === 0){
-                swal({title : "Usuario não encotrado!", text: "Tente Novamente!", icon : "warning"});
-        }
-        } catch (error) {
-            return ;
-        }
+        const senhacripto = Cripto.criptografar(senha);
+        await api.get(`/users?email=${ email }&senha=${senhacripto}`)
+        .then((res: { data: any; }) => saveUser(res?.data))
+        .catch(() => swal({title : "Usuario não encotrado!", text: "Tente Novamente!", icon : "warning"}));
     }
+
     function handleemail(event : ChangeEvent<HTMLInputElement>){
         setEmail(event.target.value);
     }
+
     function handlesenha(event : ChangeEvent<HTMLInputElement>){
         setSenha(event.target.value);
     }
@@ -62,14 +55,6 @@ function Login(props : LoginProps){
     const [email, setEmail] = useState<string>("");
     const [senha, setSenha] = useState<string>("");
 
-    //limpar a sessão ao redirecionar para login
-    useEffect(() => {
-        if(sessionStorage.getItem('rifatube/id')){
-            sessionStorage.clear();
-        }
-    },[]);
-
-    //pegar os parametros da pagina registrar
     useEffect(() => {
         setEmail(props?.location?.state?.email || "");
         setSenha(props?.location?.state?.senha || "");
@@ -79,7 +64,6 @@ function Login(props : LoginProps){
     return (
         <div className="container">
             <Header/>
-            
             <div className="login">
                 <form onSubmit={onLogin} className="form-login">
                     <img src={logo} alt="RifaTube"/>

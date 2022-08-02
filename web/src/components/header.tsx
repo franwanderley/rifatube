@@ -14,7 +14,10 @@ function Header(){
     const [menuActive,setMenuActive] = useState(0);
     const history = useHistory();
 
-    //Assim que o input muda Cai nessa função
+    function handleLogOut () {
+        sessionStorage.clear();
+    }
+
     function openMenu(){
         (menuActive === 0) ?
             setMenuActive(1)
@@ -25,15 +28,15 @@ function Header(){
     function perfil(){
         const id = sessionStorage.getItem('rifatube/id');
         return (id) ?
-            <div className={"perfil "}>
+            <div className={"perfil"}>
                 <Link to={'/perfil/' + Cripto.criptografar(id)}>{sessionStorage.getItem('rifatube/nome')}</Link>
-                <Link to='/login'>Sair</Link>
+                <a href="#" onClick={handleLogOut}>Sair</a>
             </div>
         : 
-            <div className={"perfil "}>
-            <Link to='/login'>Entrar</Link>
-            <Link to='/registrar'>Registrar</Link>
-        </div>;
+            <div className={"perfil"}>
+                <Link to='/login'>Entrar</Link>
+                <Link to='/registrar'>Registrar</Link>
+            </div>;
     }
     function perfilResp(){
         //Perfil Responsivo
@@ -45,14 +48,12 @@ function Header(){
             </div>
         : 
             <div className={"perfil2 " + (menuActive && "open")}>
-            <Link to='/login'>Entrar</Link>
-            <Link to='/registrar'>Registrar</Link>
-        </div>;
+                <Link to='/login'>Entrar</Link>
+                <Link to='/registrar'>Registrar</Link>
+            </div>;
         
     }
-    function handleInputChange(event: ChangeEvent<HTMLInputElement>){
-        setSearch(event.target.value);
-    }
+
     //função para pesquisar
     function onSearch(event : FormEvent){
         event.preventDefault();
@@ -72,7 +73,7 @@ function Header(){
                     }
                 </button>    
                 <form className="form-search" onSubmit={onSearch}>
-                 <input type="search" placeholder="Pesquisar Campanhas"  className="input-search" onChange={handleInputChange}/>
+                 <input type="search" placeholder="Pesquisar Campanhas"  className="input-search" onChange={e => setSearch(e.target.value)}/>
                  <button type="submit"> <FaSearch/> </button>
                 </form>
                 {perfil()}
@@ -84,7 +85,7 @@ function Header(){
                     <li><Link to="termos">Termos de Uso</Link></li>
                     </ul>
                     <form className={"form-search " + (menuActive && "open")} onSubmit={onSearch}>
-                        <input type="search" placeholder="Pesquisar Campanhas"  className="input-search" onChange={handleInputChange}/>
+                        <input type="search" placeholder="Pesquisar Campanhas"  className="input-search" onChange={e => setSearch(e.target.value)}/>
                         <button type="submit"> <FaSearch/> </button>
                     </form>
                     {perfilResp()}

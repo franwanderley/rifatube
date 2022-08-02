@@ -7,56 +7,7 @@ import Header from '../components/header';
 import Footer from '../components/footer';
 import "./../styles/createcampanha.css";
 
-function CreateCampanha(){
-
-    //Pegar hoje no formato yyyy-mm-dd
-    function getHoje() {
-        let teste = (new Date()).toLocaleDateString(); //toLocaleDateString
-        let date = teste.split('/');
-        const dateformat = date.reverse().join('-');
-        return dateformat;
-    }
-    function redirecionar(){
-        history.push('/');
-    }
-     //Vai salvar os inputs ao escrever
-    function handleProduto(event : ChangeEvent<HTMLInputElement>){
-        setProduto(event.target.value);
-    }
-    function handleImagem(event : ChangeEvent<HTMLInputElement>){
-        setImagem(event.target.value);
-    }
-    function handleData(event : ChangeEvent<HTMLDataElement>){
-        const aux = event.target.value;
-        //Transformar yyyy-mm-dd para dd/mm/yyyy
-        const dateFormart = aux.split('-').reverse().join("/");
-        console.log(dateFormart);   
-        setDate(dateFormart);
-    }
-    function handleQtdMax(event : ChangeEvent<HTMLInputElement>){
-        setQtdmax(Number(event.target.value));
-    }
-    function handlePreco(event : ChangeEvent<HTMLInputElement>){
-        setPreco(Number(event.target.value));
-    }
-    async function onSave(event : FormEvent<HTMLFormElement>){
-        event.preventDefault();//Para não atualizar a pagina ao enviar
-        const idCriador = sessionStorage.getItem('rifatube/id');
-        //Formatar Datas
-        const data = {
-         produto, imagem, datasorteio,qtdmax, preco, qtd : 0, situacao : "aberto", idCriador 
-        };
-        
-        try{
-            const x = await api.post('campanha',data);//Vai conectar com o BACK_END e enviar informações do form 
-            if(x.data){
-                swal({title: "Campanha salvo com successo", icon: "success"});
-            }else
-                swal({title : "A campanha não foi salvo", icon : "warning"});
-         }catch(error){
-            swal({title : "Erro no Formulario", text : String(error) , icon : "warning"});
-         }
-    }
+function CreateCampanha() {
 
     const [produto, setProduto] = useState("");
     const [imagem, setImagem] = useState("");
@@ -65,11 +16,40 @@ function CreateCampanha(){
     const [preco, setPreco] = useState(0);
     const history = useHistory();
 
+    function getHoje() {
+        const day = (new Date()).toLocaleDateString();
+        const date = day.split('/');
+        const dateformat = date.reverse().join('-');
+        return dateformat;
+    }
+
+    function redirecionar(){
+        history.push('/');
+    }
+
+    function handleData(event : ChangeEvent<HTMLDataElement>){
+        const aux = event.target.value;
+        const dateFormart = aux.split('-').reverse().join("/");
+        console.log(dateFormart);   
+        setDate(dateFormart);
+    }
+
+    async function onSave(event : FormEvent<HTMLFormElement>){
+        event.preventDefault();
+        const idCriador = sessionStorage.getItem('rifatube/id');
+        const data = {
+         produto, imagem, datasorteio,qtdmax, preco, qtd : 0, situacao : "aberto", idCriador 
+        };
+        await api.post('campanha',data)
+        .then(res => swal({title: "Campanha salvo com successo", icon: "success"}))
+        .catch(() => swal({title : "A campanha não foi salvo", icon : "warning"}));
+    }
+
     useEffect(() => {
         const session = sessionStorage.getItem('rifatube/id');
         if(! session)
             redirecionar();
-    }, []);
+    }, [redirecionar]);
 
     return (
        <div className="container">
@@ -79,24 +59,53 @@ function CreateCampanha(){
                 <h3>Criar Campanha</h3>
                 <div className="divnome">
                     <label htmlFor="produto">Nome</label>
-                    <input type="nome" id="produto" onChange={handleProduto} required minLength={5}/>
+                    <input 
+                        type="nome" 
+                        id="produto" 
+                        onChange={e => setProduto(e.target.value)} 
+                        required 
+                        minLength={5}
+                    />
                 </div>
                 <div className="divurl">
                     <label htmlFor="url">Image(URL)</label>
-                    <input type="text" id="url" onChange={handleImagem} required/>
+                    <input
+                        type="text" 
+                        id="url"
+                        onChange={e => setImagem(e.target.value)}
+                        required
+                    />
                 </div>
                 <div className="divdata">
                     <label htmlFor="datasorteio">Data Final</label>
-                    <input type="date" id="datasorteio" min={getHoje()}  onChange={handleData} required/>
+                    <input 
+                        type="date" 
+                        id="datasorteio" 
+                        min={getHoje()}  
+                        onChange={handleData} 
+                        required
+                    />
                 </div>
                 <div className="juntos">
                     <div className="divqtdmax">
                         <label htmlFor="qtdmax">Quantidade de Rifas</label>
-                        <input type="number" id="qtdmax" onChange={handleQtdMax} min={2} required/>
+                        <input 
+                            type="number"
+                            id="qtdmax"
+                            onChange={e => setQtdmax(Number(e.target.value))} 
+                            min={2} 
+                            required
+                        />
                     </div>
                     <div className="divpreco">
                         <label htmlFor="preco">Preço</label>
-                        <input type="number" id="preco" onChange={handlePreco} min={1} required/>
+                        <input 
+                            type="number" 
+                            id="preco" 
+                            onChange={e => setPreco(Number(e.target.value))} 
+                            min={1}
+                            required
+                        />
                     </div>
                 </div>
 
